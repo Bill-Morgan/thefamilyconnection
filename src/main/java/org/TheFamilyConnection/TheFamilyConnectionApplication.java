@@ -10,7 +10,6 @@ public class TheFamilyConnectionApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TheFamilyConnectionApplication.class, args);
-//		SpringApplication.run(TheFamilyConnectionApplication.class, args);
 	}
 
 }
