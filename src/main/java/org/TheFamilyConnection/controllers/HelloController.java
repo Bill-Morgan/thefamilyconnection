@@ -15,6 +15,12 @@ public class HelloController {
         return "index";
     }
 
+    @RequestMapping(value="profile")
+    public String displayProfile(Model model){
+
+        return ("users/profile");
+    }
+
     @RequestMapping(value="login", method = RequestMethod.GET)
     public String displayLoginForm(Model model)  {
 
@@ -26,7 +32,7 @@ public class HelloController {
 
 
         if (username.equals("billm") && password.equals("password")) {
-                return ("users/profile");
+                return ("redirect:profile");
         }
         return("users/login");
     }
