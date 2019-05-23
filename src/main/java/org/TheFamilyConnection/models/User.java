@@ -1,24 +1,33 @@
 package org.TheFamilyConnection.models;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class User {
 
     private static Integer nextId = 1;
 
+    @NotNull
     private Integer id;
 
     private String primaryEmail;
 
     private String password;
 
-    private String lName;
+    @NotNull
+    private String mlName;
 
+    @NotNull
     private String fName;
 
+    @NotNull
     private String mName;
 
+    private String lName;
+
     private Date dob;
+
+    private String placeOfBirth;
 
     private Date dod;
 
@@ -35,11 +44,33 @@ public class User {
         nextId++;
     }
 
-    public User(String lName, String fName) {
-        this.lName = lName;
-        this.fName = fName;
-        this.id = nextId;
+    private Integer newId(){
+        Integer retval = nextId;
         nextId++;
+        return retval;
+    }
+
+    public User(String fName, String mName) {
+        this.id = newId();
+        this.fName = fName;
+        this.mName = mName;
+    }
+
+    public User(String primaryEmail, String password, String mlName, String fName, String mName, String lName, Date dob, String placeOfBirth, Date dod, String address, String city, String state, String zip) {
+        this.id = newId();
+        this.primaryEmail = primaryEmail;
+        this.password = password;
+        this.mlName = mlName;
+        this.fName = fName;
+        this.mName = mName;
+        this.lName = lName;
+        this.dob = dob;
+        this.placeOfBirth = placeOfBirth;
+        this.dod = dod;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
     }
 
     public Integer getId() {
@@ -60,14 +91,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getlName() {
-        return lName;
-    }
-
-    public void setlName(String lName) {
-        this.lName = lName;
     }
 
     public String getfName() {

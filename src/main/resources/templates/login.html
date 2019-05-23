@@ -5,16 +5,10 @@
     <title th:text="${title}">Title</title>
 </head>
 <body>
-<table border="1px" width="75%">
-    <tr>
-        <td align="center"><img src="http://www.thefamilyconnection.org/images/thefamilyconnection.png" /> </td>
-        <td>Username:</td>
-        <td></td>
-        <td>My Profile</td>
-        <td>Events</td>
-    </tr>
-</table>
+<navHeader th:replace="fragments  :: navHeader"></navHeader>
+
 <br/><br/>
+<!--<p th:if ${errorMsg} th:text="${errorMsg}"></p> -->
 <form method="post">
     <label>Username</label>
     <input type="text" name="username" /><br/>
