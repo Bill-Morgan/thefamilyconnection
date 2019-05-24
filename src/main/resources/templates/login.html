@@ -9,13 +9,21 @@
 
 <br/><br/>
 <!--<p th:if ${errorMsg} th:text="${errorMsg}"></p> -->
-<form method="post">
+<table><tr><td width="100px>"></td>
+<td>
+<div class="w3-container w3-green w3-border w3-border-blue w3-cell-middle w3-center w3-cell w3-padding-large">
+<h1>Login</h1>
+    <form method="post">
     <label>Username</label>
-    <input type="text" name="username" /><br/>
+    <input type="text" name="username" />
+        <br/><br/>
     <label>Password</label>
     <input type="password" name="password" />
+        <br/><br/>
     <input type="submit" value="Login" />
 </form>
-
+</div>
+</td></tr></table>
+<br/><br/><br/>
 </body>
 </html>

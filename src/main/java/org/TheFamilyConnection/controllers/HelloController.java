@@ -54,8 +54,7 @@ public class HelloController {
         if (username.equals("billm") && password.equals("password123*")) {
                 logedIn = Boolean.TRUE;
                 this.username = username;
-                model.addAttribute("username", this.username);
-                return ("/user/profile");
+                return ("redirect:/user");
         }
         model.addAttribute("errorMsg", "Username or password incorrect");
         return("login");
