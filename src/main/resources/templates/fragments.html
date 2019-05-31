@@ -3,63 +3,138 @@
 <head th:fragment="head">
     <meta charset="UTF-8"/>
     <title th:text="${title}">TheFamilyConnection</title>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/w3.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
-<!--
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bo<p>otstrap.min.css" />
-    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
- -->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
 <body>
 <navHeader th:fragment="navHeader">
-    <div class="w3-cell-row w3-cell-middle">
-
-        <div class="w3-container w3-border w3-white w3-center  w3-cell">
-            <p><img src="http://www.thefamilyconnection.org/images/thefamilyconnection.png" width="300px" /></p>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <a class="navbar-brand" href="#"><img src="/images/thefamilyconnection.png" width="300px" /></a>
+        <h3 th:if="${username}" th:text="'Username: ' + ${username}"></h3>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <ul class="navbar-nav mr-4">
+                <li class="nav-item">
+                    <a href="/user"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">My Profile</button></a>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large w3-button-disable">Events</button>
+                </li>
+            </ul>
         </div>
-
-        <div class="w3-container w3-green w3-border w3-cell-middle w3-center w3-cell">
-
-            <p th:if="${username}" th:text="'Username: ' + ${username}"></p>
-            <p th:unless="${username}" th:text="'Username:'"></p>
-            <p  th:if="${username}"><a href="logout"><button class="w3-button w3-white w3-border w3-border-blue w3-round-large">Logout</button></a></p>
-        </div>
-        <div class="w3-container w3-green w3-border w3-cell-middle w3-center w3-cell">
-            <p>&nbsp;</p>
-            <p><button class="w3-button w3-white w3-border w3-border-blue w3-round-large">My Profile</button></p>
-        </div>
-        <div class="w3-container w3-green w3-border w3-cell-middle w3-center w3-cell">
-            <p>&nbsp;</p>
-            <p><button class="w3-button w3-white w3-border w3-border-blue w3-round-large w3-button-disable">Events</button></p>
-        </div>
-    </div>
+    </nav>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
 </navHeader>
 
-<pBlock th:fragment="pBlock">
-    <div class="container">
-        <form action="action_page.php">
-            <br/><br/>
-            <div class="w3-container w3-green w3-border w3-cell-middle w3-center w3-cell">
-                <label for="fname">First Name</label>
-                <input type="text" id="fname" name="firstname" placeholder="Your name.."/>
-            </div>
-            <label for="lname">Last Name</label>
-            <input type="text" id="lname" name="lastname" placeholder="Your last name.."/>
-
-            <label for="country">Country</label>
-            <select id="country" name="country">
-                <option value="australia">Australia</option>
-                <option value="canada">Canada</option>
-                <option value="usa">USA</option>
-            </select>
-
-            <label for="subject">Subject</label>
-            <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
-
-            <input type="submit" value="Submit" />
-        </form>
+<div class="container-fluid border theam-bg-color"  th:fragment="pBlock">
+    <div class="row">
+        <div class="col-12 center">
+            <h1 class="center">My Profile</h1> <br /> <br />
+        </div>
     </div>
-</pBlock>
+    <form action="action_page.php">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label for="fName">First Name</label>
+                <input type="text" id="fName" name="fName" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label for="mName">Middle Name</label>
+                <input type="text" id="mName" name="mName" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label for="lName">Last Name</label>
+                <input type="text" id="lName" name="lName" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label for="suffix">Suffix</label>
+                <input type="text" id="suffix" name="suffix" class="form-item"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label for="dob">Date of birth</label>
+                <input type="text" id="dob" name="dob" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label for="pob">Place of birth</label>
+                <input type="text" id="pob" name="pob" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label for="dod">Date of death</label>
+                <input type="text" id="dod" name="dod" class="form-item"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label for="mother">Mother</label>
+                <input type="text" id="mother" name="mother" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label for="father">Father</label>
+                <input type="text" id="father" name="father" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label for="spouse">Spouse</label>
+                <input type="text" id="spouse" name="spouse" class="form-item"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label for="city">City</label>
+                <input type="text" id="city" name="city" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label for="state">State</label>
+                <input type="text" id="state" name="state" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label for="zip">Zip</label>
+                <input type="text" id="zip" name="zip" class="form-item"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label for="primaryEmail">Email</label>
+                <input type="text" id="primaryEmail" name="primaryEmail" class="form-item"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 center">
+                <input type="submit" value="Update" />
+            </div>
+        </div>
+    </form>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+</div>
+
+
 
 </body>
 </html>

@@ -41,7 +41,7 @@ public class HelloController {
 
     @RequestMapping(value="login", method = RequestMethod.GET)
     public String displayLoginForm(Model model)  {
-
+        model.addAttribute("action", "Login");
         return("login");
     }
 
@@ -57,6 +57,7 @@ public class HelloController {
                 return ("redirect:/user");
         }
         model.addAttribute("errorMsg", "Username or password incorrect");
+        model.addAttribute("action", "Login");
         return("login");
     }
 

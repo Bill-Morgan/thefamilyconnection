@@ -11,7 +11,11 @@ plugins {
 	id 'java'
 }
 
+apply plugin: 'java'
+apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
 
 group = 'org.TheFamilyConnection'
 version = '0.0.1-SNAPSHOT'
@@ -25,6 +29,8 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	compile 'org.springframework.boot:spring-boot-starter-web'
 	runtime 'org.springframework.boot:spring-boot-devtools'
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('mysql:mysql-connector-java')
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
