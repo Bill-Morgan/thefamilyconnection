@@ -1,40 +1,41 @@
 package org.TheFamilyConnection.controllers;
 
+import org.TheFamilyConnection.models.User;
+import org.TheFamilyConnection.models.data.UserDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.Null;
+import java.util.List;
+
 @Controller
 @RequestMapping("")
 public class HelloController {
 
-    public static Boolean logedIn = Boolean.FALSE;
     public static String username;
+
+    @Autowired
+    private UserDAO userDAO;
+
 
     @RequestMapping(value="")
     public String index() {
-
-        if (!logedIn) {
-            return ("redirect:login");
-        }
-        return "index";
+        UserController.isLoggedIn();
+        return "redirect:/user";
     }
 
     @RequestMapping(value="profile")
     public String displayProfile(Model model){
-
-        if (!logedIn) {
-            return ("redirect:login");
-        }
-
-        return ("users/profile");
+    return ("redirect:/user");
     }
 
     @RequestMapping(value="logout")
     public String logout()  {
-        logedIn = Boolean.FALSE;
+        UserController.userID = null;
         return("redirect:/");
     }
 
@@ -49,13 +50,14 @@ public class HelloController {
     public String processLoginForm(@RequestParam String username,
                                    @RequestParam String password,
                                    Model model)  {
-
-
-        if (username.equals("billm") && password.equals("password123*")) {
-                logedIn = Boolean.TRUE;
-                this.username = username;
+        UserController.userID = null;
+        for (User users : userDAO.findAll()) {
+            if (users.getPrimaryEmail().equals(username) & users.getPassword().equals(password)) {
+                UserController.userID = users.getId();
                 return ("redirect:/user");
+            }
         }
+
         model.addAttribute("errorMsg", "Username or password incorrect");
         model.addAttribute("action", "Login");
         return("login");

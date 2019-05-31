@@ -45,7 +45,7 @@
             <h1 class="center">My Profile</h1> <br /> <br />
         </div>
     </div>
-    <form action="action_page.php">
+    <form th:object="${user}">
         <div class="row">
             <div class="col-2"></div>
             <div class="form-group col-2">
@@ -98,27 +98,27 @@
         <div class="row">
             <div class="col-2"></div>
             <div class="form-group col-2">
-                <label for="address">Address</label>
-                <input type="text" id="address" name="address" class="form-item"/>
+                <label th:for="address">Address</label>
+                <input type="text" th:field="*{address}" class="form-item"/>
             </div>
             <div class="form-group col-2">
-                <label for="city">City</label>
-                <input type="text" id="city" name="city" class="form-item"/>
+                <label th:for="city">City</label>
+                <input type="text" th:field="*{city}" class="form-item"/>
             </div>
             <div class="form-group col-2">
-                <label for="state">State</label>
-                <input type="text" id="state" name="state" class="form-item"/>
+                <label th:for="state">State</label>
+                <input type="text" th:field="*{state}" class="form-item"/>
             </div>
             <div class="form-group col-2">
-                <label for="zip">Zip</label>
-                <input type="text" id="zip" name="zip" class="form-item"/>
+                <label th:for="zip">Zip</label>
+                <input type="text" th:field="*{zip}" class="form-item"/>
             </div>
         </div>
         <div class="row">
             <div class="col-2"></div>
             <div class="form-group col-2">
-                <label for="primaryEmail">Email</label>
-                <input type="text" id="primaryEmail" name="primaryEmail" class="form-item"/>
+                <label th:for="primaryEmail">Email</label>
+                <input type="text" th:field="*{primaryEmail}" class="form-item"/>
             </div>
         </div>
         <div class="row">
