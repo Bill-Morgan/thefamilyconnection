@@ -21,6 +21,11 @@
     text-align: center;
 }
 
+hr {
+    color: white;
+    background-color: white;
+}
+
 .navbar{ background:#4AAE52;}
 .nav-link , .navbar-brand{ color: #f4f4f4; cursor: pointer;}
 .nav-link{ margin-right: 1em !important;}

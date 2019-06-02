@@ -13,13 +13,14 @@
 <navHeader th:fragment="navHeader">
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg fixed-top">
-        <a class="navbar-brand" href="#"><img src="/images/thefamilyconnection.png" width="300px" /></a>
-        <h3 th:if="${username}" th:text="'Username: ' + ${username}"></h3>
+        <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
+
+        <h3 th:if="${userName}" th:text="'Username: ' + ${userName}"></h3>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
-            <ul class="navbar-nav mr-4" th:if="${username}">
+            <ul class="navbar-nav mr-4" th:if="${user}">
                 <li class="nav-item">
                     <a href="/user"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">My Profile</button></a>
                 </li>
@@ -45,39 +46,85 @@
             <h1 class="center">My Profile</h1> <br /> <br />
         </div>
     </div>
-    <form th:object="${user}">
+    <form method="post" th:object="${user}">
+        <ul th:if="${#fields.hasErrors('*')}">
+            <li th:each="err : ${#fields.errors('*')}" th:text="'Debug Info: ' + ${err}">Input is incorrect</li>
+        </ul>
         <div class="row">
             <div class="col-2"></div>
-            <div class="form-group col-2">
-                <label for="fName">First Name</label>
-                <input type="text" id="fName" name="fName" class="form-item"/>
-            </div>
-            <div class="form-group col-2">
-                <label for="mName">Middle Name</label>
-                <input type="text" id="mName" name="mName" class="form-item"/>
-            </div>
-            <div class="form-group col-2">
-                <label for="lName">Last Name</label>
-                <input type="text" id="lName" name="lName" class="form-item"/>
-            </div>
-            <div class="form-group col-2">
-                <label for="suffix">Suffix</label>
-                <input type="text" id="suffix" name="suffix" class="form-item"/>
-            </div>
+            <div class="col-8"><hr/></div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-3">(Birth Name)</div>
         </div>
         <div class="row">
             <div class="col-2"></div>
             <div class="form-group col-2">
-                <label for="dob">Date of birth</label>
-                <input type="text" id="dob" name="dob" class="form-item"/>
+                <label th:for="bFName">First Name</label>
+                <input type="text" th:field="*{bFName}" class="form-item"/>
+                <span th:errors="*{bFName}" class="errorMsg"></span>
             </div>
             <div class="form-group col-2">
-                <label for="pob">Place of birth</label>
-                <input type="text" id="pob" name="pob" class="form-item"/>
+                <label th:for="bMName">Middle Name</label>
+                <input type="text" th:field="*{bMName}" class="form-item"/>
+                <span th:errors="*{bMName}" class="error"></span>
             </div>
             <div class="form-group col-2">
-                <label for="dod">Date of death</label>
-                <input type="text" id="dod" name="dod" class="form-item"/>
+                <label th:for="bLName">Last Name</label>
+                <input type="text" th:field="*{bLName}" class="form-item"/>
+                <span th:errors="*{bLName}" class="error"></span>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="bSuffix">Suffix</label>
+                <input type="text" th:field="*{bSuffix}" class="form-item"/>
+                <span th:errors="*{bSuffix}" class="errorMsg"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8"><hr/></div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-2">(Current Name)</div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label th:for="cFName">First Name</label>
+                <input type="text" th:field="*{cFName}" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="cMName">Middle Name</label>
+                <input type="text" th:field="*{cMName}" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="cLName">Last Name</label>
+                <input type="text" th:field="*{cLName}" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="cSuffix">Suffix</label>
+                <input type="text" th:field="*{cSuffix}" class="form-item"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8"><hr/></div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label for="dobStr">Date of birth</label>
+                <input type="date" id="dobStr" name="dobStr" th:value="${dobStr}" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="pob">Place of birth</label>
+                <input type="text" th:field="*{pob}" class="form-item"/>
+            </div>
+            <div class="form-group col-2">
+                <label for="dodStr">Date of death</label>
+                <input type="date" id="dodStr" name="dodStr" th:value="${dodStr}" class="form-item"/>
             </div>
         </div>
         <div class="row">

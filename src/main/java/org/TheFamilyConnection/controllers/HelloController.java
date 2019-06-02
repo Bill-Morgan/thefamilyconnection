@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.constraints.Null;
-import java.util.List;
 
 @Controller
 @RequestMapping("")
@@ -24,7 +22,6 @@ public class HelloController {
 
     @RequestMapping(value="")
     public String index() {
-        UserController.isLoggedIn();
         return "redirect:/user";
     }
 
@@ -35,7 +32,7 @@ public class HelloController {
 
     @RequestMapping(value="logout")
     public String logout()  {
-        UserController.userID = null;
+        UserController.userID = -1;
         return("redirect:/");
     }
 
@@ -52,8 +49,8 @@ public class HelloController {
                                    Model model)  {
         UserController.userID = null;
         for (User users : userDAO.findAll()) {
-            if (users.getPrimaryEmail().equals(username) & users.getPassword().equals(password)) {
-                UserController.userID = users.getId();
+            if (users.getPrimaryEmail().toLowerCase().equals(username.toLowerCase()) & users.getPassword().equals(password)) {
+                UserController.setCurrentUser(users);
                 return ("redirect:/user");
             }
         }
