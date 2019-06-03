@@ -25,10 +25,10 @@ public class HelloController {
         return "redirect:/user";
     }
 
-    @RequestMapping(value="profile")
-    public String displayProfile(Model model){
-    return ("redirect:/user");
-    }
+//    @RequestMapping(value="profile")
+//    public String displayProfile(Model model){
+//    return ("redirect:/user");
+//    }
 
     @RequestMapping(value="logout")
     public String logout()  {

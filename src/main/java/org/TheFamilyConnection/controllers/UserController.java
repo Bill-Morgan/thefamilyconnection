@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashMap;
 
 @Controller
 @RequestMapping("user")
@@ -51,10 +50,17 @@ public class UserController {
         }
     }
 
-    private static Date strToDate(String inStr)throws Exception{
-        if (inStr.length() == 0) { return null;}
-        Date retValue = new SimpleDateFormat("yyyy-MM-dd").parse(inStr);
-        return  retValue;
+    public HashMap<Integer, String> buildAllPeopleHashMap(){
+        HashMap<Integer, String> allPeopleHashMap = new HashMap<>();
+        String tempName;
+        for (User eachUser : userDAO.findAll()) {
+            tempName = eachUser.getcFullName();
+            if (tempName.length() < 4){
+                tempName = eachUser.getbFullName();
+            }
+            allPeopleHashMap.put(eachUser.getId(), tempName);
+        }
+        return allPeopleHashMap;
     }
 
     @RequestMapping(value="")
@@ -66,26 +72,38 @@ public class UserController {
     public String displayUserProfileForm(Model model) {
         if (!isLoggedIn()) {return ("redirect:/login");}
         User user = userDAO.findOne(userID);
+        Integer motherID = 0;
+        Integer fatherID = 0;
+        Integer spouseID = 0;
+        if (user.getMother() != null) {
+            motherID = (user.getMother()).getId();
+        }
+        if(user.getFather() != null) {
+            fatherID = (user.getFather()).getId();
+        }
+        if (user.getSpouse() != null) {
+            spouseID = (user.getSpouse()).getId();
+        }
         model.addAttribute("user", user);
-        model.addAttribute("dobStr", user.getDob());
-        model.addAttribute("dodStr", user.getDod());
         model.addAttribute("userName", userName);
+        model.addAttribute("allUsers", buildAllPeopleHashMap());
+        model.addAttribute("motherID", motherID);
+        model.addAttribute("fatherID", fatherID);
+        model.addAttribute("spouseID", spouseID);
         return "user/profile";
     }
 
     @RequestMapping(value="profile", method = RequestMethod.POST)
-    public String processUserProfileForm(@ModelAttribute @Valid User user,
-                                         Errors errors,
-                                         Model model,
-                                         @RequestParam String dobStr,
-                                         @RequestParam String dodStr)throws Exception{
+    public String processUserProfileForm(@ModelAttribute @Valid User user, Errors errors,
+                                         @RequestParam Integer mother,
+                                         @RequestParam Integer father,
+                                         @RequestParam Integer spouse,
+                                         Model model) {
         if (!isLoggedIn()) {return ("redirect:/login");}
         if (errors.hasErrors()) {
-            model.addAttribute("error", "has errors");
             model.addAttribute("user", user);
-            model.addAttribute("dobStr", user.getDob());
-            model.addAttribute("dodStr", user.getDod());
             model.addAttribute("userName", userName);
+            model.addAttribute("allUsers", buildAllPeopleHashMap());
             return "user/profile";
         }
         User updateUser = userDAO.findOne(userID);
@@ -100,15 +118,19 @@ public class UserController {
         updateUser.setAnniversary(user.getAnniversary());
         updateUser.setAddress(user.getAddress());
         updateUser.setCity(user.getCity());
-        updateUser.setDob(strToDate(dobStr));
-        updateUser.setDod(strToDate(dodStr));
+        updateUser.setDob(user.getDob());
+        updateUser.setDod(user.getDod());
         updateUser.setPob(user.getPob());
         updateUser.setPrimaryEmail(user.getPrimaryEmail());
         updateUser.setState(user.getState());
         updateUser.setZip(user.getZip());
+        updateUser.setAnniversary(user.getAnniversary());
+        updateUser.setMother(userDAO.findOne(mother));
+        updateUser.setFather(userDAO.findOne(father));
+        updateUser.setSpouse(userDAO.findOne(spouse));
         userDAO.save(updateUser);
         setCurrentUser(updateUser);
+        buildAllPeopleHashMap();
         return("redirect:/user");
     }
-
 }

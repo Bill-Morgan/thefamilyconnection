@@ -41,12 +41,12 @@ public class User {
 
     private String cSuffix;
 
-    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
 
     private String pob;
 
-    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dod;
 
     private String address;
@@ -57,6 +57,7 @@ public class User {
 
     private String zip;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date anniversary;
 
     @OneToOne
@@ -95,6 +96,10 @@ public class User {
         this.password = password;
     }
 
+    public String getbFullName() {
+        return ((bFName + " " + bMName + " " + bLName + " " + bSuffix).replace("null", ""));
+    }
+
     public String getbLName() {
         return bLName;
     }
@@ -125,6 +130,10 @@ public class User {
 
     public void setbSuffix(String bSuffix) {
         this.bSuffix = bSuffix;
+    }
+
+    public String getcFullName() {
+        return ((cFName + " " + cMName + " " + cLName + " " + cSuffix).replace("null", ""));
     }
 
     public String getcLName() {

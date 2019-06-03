@@ -15,7 +15,7 @@
     <nav class="navbar navbar-expand-lg fixed-top">
         <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
 
-        <h3 th:if="${userName}" th:text="'Username: ' + ${userName}"></h3>
+        <h3 th:if="${userName}" th:text="'User: ' + ${userName}"></h3>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -39,13 +39,7 @@
     <br/><br/>
 </navHeader>
 
-<div class="container-fluid border theam-bg-color"  th:fragment="pBlock">
-    <div class="row">
-        <div class="col-12 center">
-            <br/><br/>
-            <h1 class="center">My Profile</h1> <br /> <br />
-        </div>
-    </div>
+<div th:fragment="pBlock">
     <form method="post" th:object="${user}">
         <ul th:if="${#fields.hasErrors('*')}">
             <li th:each="err : ${#fields.errors('*')}" th:text="'Debug Info: ' + ${err}">Input is incorrect</li>
@@ -61,23 +55,23 @@
         <div class="row">
             <div class="col-2"></div>
             <div class="form-group col-2">
-                <label th:for="bFName">First Name</label>
-                <input type="text" th:field="*{bFName}" class="form-item"/>
+                <label th:for="bFName">First Name*</label><br/>
+                <input type="text" th:field="*{bFName}" class="form-control"/>
                 <span th:errors="*{bFName}" class="errorMsg"></span>
             </div>
             <div class="form-group col-2">
-                <label th:for="bMName">Middle Name</label>
-                <input type="text" th:field="*{bMName}" class="form-item"/>
-                <span th:errors="*{bMName}" class="error"></span>
+                <label th:for="bMName">Middle Name</label><br/>
+                <input type="text" th:field="*{bMName}" class="form-control"/>
+                <span th:errors="*{bMName}" class="errorMsg"></span>
             </div>
             <div class="form-group col-2">
-                <label th:for="bLName">Last Name</label>
-                <input type="text" th:field="*{bLName}" class="form-item"/>
-                <span th:errors="*{bLName}" class="error"></span>
+                <label th:for="bLName">Last Name*</label><br/>
+                <input type="text" th:field="*{bLName}" class="form-control"/>
+                <span th:errors="*{bLName}" class="errorMsg"></span>
             </div>
             <div class="form-group col-2">
-                <label th:for="bSuffix">Suffix</label>
-                <input type="text" th:field="*{bSuffix}" class="form-item"/>
+                <label th:for="bSuffix">Suffix</label><br/>
+                <input type="text" th:field="*{bSuffix}" class="form-control"/>
                 <span th:errors="*{bSuffix}" class="errorMsg"></span>
             </div>
         </div>
@@ -92,20 +86,24 @@
         <div class="row">
             <div class="col-2"></div>
             <div class="form-group col-2">
-                <label th:for="cFName">First Name</label>
-                <input type="text" th:field="*{cFName}" class="form-item"/>
+                <label th:for="cFName">First Name</label><br/>
+                <input type="text" th:field="*{cFName}" class="form-control"/>
+                <span th:errors="*{cFName}" class="errorMsg"></span>
             </div>
             <div class="form-group col-2">
-                <label th:for="cMName">Middle Name</label>
-                <input type="text" th:field="*{cMName}" class="form-item"/>
+                <label th:for="cMName">Middle Name</label><br/>
+                <input type="text" th:field="*{cMName}" class="form-control"/>
+                <span th:errors="*{cMName}" class="errorMsg"></span>
             </div>
             <div class="form-group col-2">
-                <label th:for="cLName">Last Name</label>
-                <input type="text" th:field="*{cLName}" class="form-item"/>
+                <label th:for="cLName">Last Name</label><br/>
+                <input type="text" th:field="*{cLName}" class="form-control"/>
+                <span th:errors="*{cLName}" class="errorMsg"></span>
             </div>
             <div class="form-group col-2">
-                <label th:for="cSuffix">Suffix</label>
-                <input type="text" th:field="*{cSuffix}" class="form-item"/>
+                <label th:for="cSuffix">Suffix</label><br/>
+                <input type="text" th:field="*{cSuffix}" class="form-control"/>
+                <span th:errors="*{cSuffix}" class="errorMsg"></span>
             </div>
         </div>
         <div class="row">
@@ -115,65 +113,103 @@
         <div class="row">
             <div class="col-2"></div>
             <div class="form-group col-2">
-                <label for="dobStr">Date of birth</label>
-                <input type="date" id="dobStr" name="dobStr" th:value="${dobStr}" class="form-item"/>
+                <label th:for="dob">Date of birth</label><br/>
+                <input type="date" th:field="*{dob}" class="form-control"/>
+                <span th:errors="*{dob}" class="errorMsg"></span>
             </div>
             <div class="form-group col-2">
-                <label th:for="pob">Place of birth</label>
-                <input type="text" th:field="*{pob}" class="form-item"/>
+                <label th:for="pob">Place of birth</label><br/>
+                <input type="text" th:field="*{pob}" class="form-control"/>
+                <span th:errors="*{pob}" class="errorMsg"></span>
             </div>
-            <div class="form-group col-2">
-                <label for="dodStr">Date of death</label>
-                <input type="date" id="dodStr" name="dodStr" th:value="${dodStr}" class="form-item"/>
+            <!-- todo: show the dod only if admin -->
+            <div th:if="${admin}">
+                <div class="form-group col-2">
+                    <label th:disabled="diabled" th:for="dod">Date of death</label><br/>
+                    <input type="date" th:field="*{dod}" class="form-control" disabled="disabled" />
+                    <span th:errors="*{dod}" class="errorMsg"></span>
+                </div>
+                <!-- todo: javascript to respond to deceased checkbox to enable/disable dod box -->
+                <div class="form-group col-2">
+                    <label>Deceased</label><br/>
+                    <input type="checkbox" name="deceased"/>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-2"></div>
             <div class="form-group col-2">
-                <label for="mother">Mother</label>
-                <input type="text" id="mother" name="mother" class="form-item"/>
+                <label for="mother">Mother</label><br/>
+                <select name="mother" id="mother" class="form-control">
+                    <option value="-1">Select</option>
+                    <option value="0"></option>
+                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
+                            th:selected="${motherID} == ${eachUser.key}"></option>
+                </select>
             </div>
             <div class="form-group col-2">
-                <label for="father">Father</label>
-                <input type="text" id="father" name="father" class="form-item"/>
+                <label for="father">Father</label><br/>
+                <select name="father" id="father" class="form-control">
+                    <option value="-1">Select</option>
+                    <option value="0"></option>
+                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
+                            th:selected="${fatherID} == ${eachUser.key}"></option>
+                </select>
             </div>
             <div class="form-group col-2">
-                <label for="spouse">Spouse</label>
-                <input type="text" id="spouse" name="spouse" class="form-item"/>
+                <label for="spouse">Spouse</label><br/>
+                <select name="spouse" id="spouse" class="form-control">
+                    <option value="-1">Select</option>
+                    <option value="0"></option>
+                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
+                            th:selected="${spouseID} == ${eachUser.key}"></option>
+                </select>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="anniversary">Anniversary</label><br/>
+                <input type="date" th:field="*{anniversary}" class="form-control"/>
             </div>
         </div>
         <div class="row">
             <div class="col-2"></div>
             <div class="form-group col-2">
-                <label th:for="address">Address</label>
-                <input type="text" th:field="*{address}" class="form-item"/>
+                <label th:for="address">Address</label><br/>
+                <input type="text" th:field="*{address}" class="form-control"/>
             </div>
             <div class="form-group col-2">
-                <label th:for="city">City</label>
-                <input type="text" th:field="*{city}" class="form-item"/>
+                <label th:for="city">City</label><br/>
+                <input type="text" th:field="*{city}" class="form-control"/>
             </div>
             <div class="form-group col-2">
-                <label th:for="state">State</label>
-                <input type="text" th:field="*{state}" class="form-item"/>
+                <label th:for="state">State</label><br/>
+                <input type="text" th:field="*{state}" class="form-control"/>
             </div>
             <div class="form-group col-2">
-                <label th:for="zip">Zip</label>
-                <input type="text" th:field="*{zip}" class="form-item"/>
+                <label th:for="zip">Zip</label><br/>
+                <input type="text" th:field="*{zip}" class="form-control"/>
             </div>
         </div>
         <div class="row">
             <div class="col-2"></div>
             <div class="form-group col-2">
-                <label th:for="primaryEmail">Email</label>
-                <input type="text" th:field="*{primaryEmail}" class="form-item"/>
+                <label th:for="primaryEmail">Email</label><br/>
+                <input type="text" th:field="*{primaryEmail}" class="form-control"/>
             </div>
         </div>
         <div class="row">
-            <div class="col-12 center">
-                <input type="submit" value="Update" />
+            <div class="col-5"></div>
+            <div class="col-1 right">
+                <button type="submit" class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">Update</button>
+            </div>
+            <div class="col-1">
+                <a href="/user"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">Cancel</button></a>
             </div>
         </div>
     </form>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-2">* required</div>
+    </div>
     <br/><br/>
     <br/><br/>
     <br/><br/>
@@ -187,5 +223,6 @@
 
 
 
+<footer class="theam-bg-color" th:fragment="footer">© 2019 TheFamilyConnection.org </footer>
 </body>
 </html>
