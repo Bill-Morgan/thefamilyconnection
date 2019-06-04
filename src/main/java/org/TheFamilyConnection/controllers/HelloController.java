@@ -49,9 +49,11 @@ public class HelloController {
                                    Model model)  {
         UserController.userID = null;
         for (User users : userDAO.findAll()) {
-            if (users.getPrimaryEmail().toLowerCase().equals(username.toLowerCase()) & users.getPassword().equals(password)) {
-                UserController.setCurrentUser(users);
-                return ("redirect:/user");
+            if (!User.isNullOrEmpty(users.getPrimaryEmail()) && !User.isNullOrEmpty(users.getPassword())) {
+                if (users.getPrimaryEmail().toLowerCase().equals(username.toLowerCase()) & users.getPassword().equals(password)) {
+                    UserController.setCurrentUser(users);
+                    return ("redirect:/user");
+                }
             }
         }
 

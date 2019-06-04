@@ -38,27 +38,13 @@ public class UserController {
 
     public static void setCurrentUser(User user) {
         userID = user.getId();
-        if (user.getcFName().length() > 0) {
-            userName = user.getcFName();
-        } else {
-            userName = user.getbFName();
-        }
-        if (user.getcLName().length() > 0) {
-            userName = userName + " " + user.getcLName();
-        } else {
-            userName = userName + " " + user.getbLName();
-        }
+        userName = user.getFullName();
     }
 
     public HashMap<Integer, String> buildAllPeopleHashMap(){
         HashMap<Integer, String> allPeopleHashMap = new HashMap<>();
-        String tempName;
         for (User eachUser : userDAO.findAll()) {
-            tempName = eachUser.getcFullName();
-            if (tempName.length() < 4){
-                tempName = eachUser.getbFullName();
-            }
-            allPeopleHashMap.put(eachUser.getId(), tempName);
+            allPeopleHashMap.put(eachUser.getId(), eachUser.getFullName());
         }
         return allPeopleHashMap;
     }

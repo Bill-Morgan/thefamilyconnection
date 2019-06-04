@@ -1,7 +1,6 @@
 package org.TheFamilyConnection.models;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import sun.util.calendar.LocalGregorianCalendar;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -57,6 +56,9 @@ public class User {
 
     private String zip;
 
+    @Column(columnDefinition = "int default 0")
+    private Integer admin;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date anniversary;
 
@@ -76,8 +78,22 @@ public class User {
     public User() {
     }
 
+    public static boolean isNullOrEmpty(String str) {
+        if(str != null && !str.isEmpty())
+            return false;
+        return true;
+    }
+
     public Integer getId() {
         return id;
+    }
+
+    public Integer getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Integer admin) {
+        this.admin = admin;
     }
 
     public String getPrimaryEmail() {
@@ -94,10 +110,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getbFullName() {
-        return ((bFName + " " + bMName + " " + bLName + " " + bSuffix).replace("null", ""));
     }
 
     public String getbLName() {
@@ -133,7 +145,27 @@ public class User {
     }
 
     public String getcFullName() {
-        return ((cFName + " " + cMName + " " + cLName + " " + cSuffix).replace("null", ""));
+        String retValue = "";
+        if (!isNullOrEmpty(cFName)) {retValue = cFName;}
+        if (!isNullOrEmpty(cMName)) {retValue += (" " + cMName);}
+        if (!isNullOrEmpty(cLName)) {retValue += (" " + cLName);}
+        if (!isNullOrEmpty(cSuffix)) {retValue += (" " + cSuffix);}
+        return retValue;
+    }
+
+    public String getbFullName() {
+        String retValue = "";
+        if (!isNullOrEmpty(bFName)) {retValue = bFName;}
+        if (!isNullOrEmpty(bMName)) {retValue += (" " + bMName);}
+        if (!isNullOrEmpty(bLName)) {retValue += (" " + bLName);}
+        if (!isNullOrEmpty(bSuffix)) {retValue += (" " + bSuffix);}
+        return retValue;
+    }
+
+    public String getFullName() {
+        String retValue = getcFullName();
+        if (isNullOrEmpty(retValue)) {retValue = getbFullName();}
+        return retValue;
     }
 
     public String getcLName() {
