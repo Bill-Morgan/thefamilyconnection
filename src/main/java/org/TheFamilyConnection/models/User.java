@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -88,6 +89,10 @@ public class User {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getAdmin() {
         return admin;
     }
@@ -166,6 +171,15 @@ public class User {
         String retValue = getcFullName();
         if (isNullOrEmpty(retValue)) {retValue = getbFullName();}
         return retValue;
+    }
+
+    public String getFullNameBday() {
+        String retValue = getFullName();
+        if (getDob() == null) { return retValue;}
+        String pattern = "MM/dd/yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String date = simpleDateFormat.format(getDob());
+        return retValue + " " + date;
     }
 
     public String getcLName() {

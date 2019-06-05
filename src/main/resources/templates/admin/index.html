@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8" />
+    <title th:text="${title}">Title</title>
+</head>
+<body>
+<navHeader th:replace="fragments  :: navHeader"></navHeader>
+<h1 class="error center" th:if="${errors}" th:text="'Has Errors'"></h1>
+<div class="container-fluid border theme-bg-color">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-6">
+                    <br/><br/>
+                    <h2 class="center">Select User Profile To Edit</h2> <br /> <br />
+                </div>
+            </div>
+            <form method="post">
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label for="editUser">Users</label><br/>
+                        <select name="editUser" id="editUser" class="form-control">
+                            <option value="-1">Select</option>
+                            <option value="0"></option>
+                            <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
+                                th:selected="${eachUser.key} == ${user.id}">
+                            </option>
+                        </select>
+                    </div>
+               </div>
+                <div class="row">
+                    <div class="col-6 center">
+                            <button type="submit" class="btn btn-primary btn-lg"> Select </button>
+                            <button type="submit" class="btn btn-primary btn-lg">New</button>
+                            <a href="/user"><button class="btn btn-primary btn-lg">Cancel</button></a>
+                    </div>
+                </div>
+            </form>
+            <br/><br/><br/>
+        </div>
+    </div>
+</div>
+<div class="container-fluid border theme-bg-color">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <h3 class="center theme-bg-color" th:text="'Profile for: ' + ${editUserName}"></h3>
+        </div>
+    </div>
+    <div th:replace="fragments :: pBlock"></div>
+</div>
+</body>
+</html>

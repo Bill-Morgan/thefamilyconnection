@@ -12,7 +12,7 @@
     width: 600px;
 }
 
-.theam-bg-color {
+.theme-bg-color {
     background-color: darkblue;
     color: white;
 }
@@ -24,6 +24,11 @@
 hr {
     color: white;
     background-color: white;
+}
+
+.btn-primary {
+    background-color: white !important;
+    color: black !important;
 }
 
 .navbar{ background:#4AAE52;}

@@ -25,23 +25,21 @@ public class UserController {
     @Autowired
     private EmailAddressDao emailAddressDao;
 
-    public static Integer userID = -1;
+    private static Integer userID = -1;
 
-    public static String userName;
-
-    public static Boolean isLoggedIn(){
-        if (userID < 0) {
-            return (false);
-        }
-        return (true);
+    public static Integer getUserID() {
+        return userID;
     }
 
-    public static void setCurrentUser(User user) {
-        userID = user.getId();
-        userName = user.getFullName();
+    public static void setUserID(Integer userID) {
+        UserController.userID = userID;
     }
 
-    public HashMap<Integer, String> buildAllPeopleHashMap(){
+//    public static void setCurrentUser(User user) {
+  //      userID = user.getId();
+    //}
+
+    private HashMap<Integer, String> buildAllPeopleHashMap(){
         HashMap<Integer, String> allPeopleHashMap = new HashMap<>();
         for (User eachUser : userDAO.findAll()) {
             allPeopleHashMap.put(eachUser.getId(), eachUser.getFullName());
@@ -56,7 +54,7 @@ public class UserController {
 
     @RequestMapping(value="profile", method = RequestMethod.GET)
     public String displayUserProfileForm(Model model) {
-        if (!isLoggedIn()) {return ("redirect:/login");}
+        if (!UtilitiesController.isLoggedIn()) {return ("redirect:/login");}
         User user = userDAO.findOne(userID);
         Integer motherID = 0;
         Integer fatherID = 0;
@@ -71,11 +69,13 @@ public class UserController {
             spouseID = (user.getSpouse()).getId();
         }
         model.addAttribute("user", user);
-        model.addAttribute("userName", userName);
+        model.addAttribute("userName", user.getFullName());
         model.addAttribute("allUsers", buildAllPeopleHashMap());
         model.addAttribute("motherID", motherID);
         model.addAttribute("fatherID", fatherID);
         model.addAttribute("spouseID", spouseID);
+        model.addAttribute("formAction", "");
+        model.addAttribute("adminLevel", user.getAdmin());
         return "user/profile";
     }
 
@@ -85,13 +85,16 @@ public class UserController {
                                          @RequestParam Integer father,
                                          @RequestParam Integer spouse,
                                          Model model) {
-        if (!isLoggedIn()) {return ("redirect:/login");}
+        if (!UtilitiesController.isLoggedIn()) {return ("redirect:/login");}
         if (errors.hasErrors()) {
             model.addAttribute("user", user);
-            model.addAttribute("userName", userName);
+            model.addAttribute("userName", user.getFullName());
             model.addAttribute("allUsers", buildAllPeopleHashMap());
+            model.addAttribute("adminLevel", user.getAdmin());
+            model.addAttribute("formAction", "");
             return "user/profile";
         }
+        /*
         User updateUser = userDAO.findOne(userID);
         updateUser.setbFName(user.getbFName());
         updateUser.setbLName(user.getbLName());
@@ -111,12 +114,14 @@ public class UserController {
         updateUser.setState(user.getState());
         updateUser.setZip(user.getZip());
         updateUser.setAnniversary(user.getAnniversary());
-        updateUser.setMother(userDAO.findOne(mother));
-        updateUser.setFather(userDAO.findOne(father));
-        updateUser.setSpouse(userDAO.findOne(spouse));
-        userDAO.save(updateUser);
-        setCurrentUser(updateUser);
-        buildAllPeopleHashMap();
-        return("redirect:/user");
+         */
+        user.setMother(userDAO.findOne(mother));
+        user.setFather(userDAO.findOne(father));
+        user.setSpouse(userDAO.findOne(spouse));
+        userDAO.save(user);
+//        setUserID(updateUser.getId());
+//        setCurrentUser(updateUser);
+//        buildAllPeopleHashMap();
+        return("redirect:/admin");
     }
 }
