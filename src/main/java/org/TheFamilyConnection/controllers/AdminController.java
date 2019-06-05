@@ -81,6 +81,6 @@ public class AdminController {
         user.setMother(userDAO.findOne(mother));
         user.setSpouse(userDAO.findOne(spouse));
         userDAO.save(user);
-        return("redirect:/user");
+        return("redirect:/admin");
     }
 }

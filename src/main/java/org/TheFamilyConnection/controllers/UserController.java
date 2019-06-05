@@ -94,34 +94,10 @@ public class UserController {
             model.addAttribute("formAction", "");
             return "user/profile";
         }
-        /*
-        User updateUser = userDAO.findOne(userID);
-        updateUser.setbFName(user.getbFName());
-        updateUser.setbLName(user.getbLName());
-        updateUser.setbMName(user.getbMName());
-        updateUser.setbSuffix(user.getbSuffix());
-        updateUser.setcFName(user.getcFName());
-        updateUser.setcLName(user.getcLName());
-        updateUser.setcMName(user.getcMName());
-        updateUser.setcSuffix(user.getcSuffix());
-        updateUser.setAnniversary(user.getAnniversary());
-        updateUser.setAddress(user.getAddress());
-        updateUser.setCity(user.getCity());
-        updateUser.setDob(user.getDob());
-        updateUser.setDod(user.getDod());
-        updateUser.setPob(user.getPob());
-        updateUser.setPrimaryEmail(user.getPrimaryEmail());
-        updateUser.setState(user.getState());
-        updateUser.setZip(user.getZip());
-        updateUser.setAnniversary(user.getAnniversary());
-         */
         user.setMother(userDAO.findOne(mother));
         user.setFather(userDAO.findOne(father));
         user.setSpouse(userDAO.findOne(spouse));
         userDAO.save(user);
-//        setUserID(updateUser.getId());
-//        setCurrentUser(updateUser);
-//        buildAllPeopleHashMap();
         return("redirect:/admin");
     }
 }

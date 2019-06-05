@@ -47,6 +47,7 @@
         <ul th:if="${#fields.hasErrors('*')}">
             <li th:each="err : ${#fields.errors('*')}" th:text="'Debug Info: ' + ${err}">Input is incorrect</li>
         </ul>
+        <input type="hidden" th:field="*{id}" />
         <div class="row">
             <div class="col-2"></div>
             <div class="col-8"><hr/></div>
@@ -218,9 +219,6 @@
     <br/><br/>
     <br/><br/>
 </div>
-
-
-
 <footer class="theme-bg-color" th:fragment="footer">© 2019 TheFamilyConnection.org </footer>
 </body>
 </html>
