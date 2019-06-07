@@ -25,6 +25,7 @@ public class UserController {
     @Autowired
     private EmailAddressDao emailAddressDao;
 
+    // this is the id of the currently logged in user
     private static Integer userID = -1;
 
     public static Integer getUserID() {
@@ -34,10 +35,6 @@ public class UserController {
     public static void setUserID(Integer userID) {
         UserController.userID = userID;
     }
-
-//    public static void setCurrentUser(User user) {
-  //      userID = user.getId();
-    //}
 
     private HashMap<Integer, String> buildAllPeopleHashMap(){
         HashMap<Integer, String> allPeopleHashMap = new HashMap<>();
@@ -56,24 +53,12 @@ public class UserController {
     public String displayUserProfileForm(Model model) {
         if (!UtilitiesController.isLoggedIn()) {return ("redirect:/login");}
         User user = userDAO.findOne(userID);
-        Integer motherID = 0;
-        Integer fatherID = 0;
-        Integer spouseID = 0;
-        if (user.getMother() != null) {
-            motherID = (user.getMother()).getId();
-        }
-        if(user.getFather() != null) {
-            fatherID = (user.getFather()).getId();
-        }
-        if (user.getSpouse() != null) {
-            spouseID = (user.getSpouse()).getId();
-        }
         model.addAttribute("user", user);
         model.addAttribute("userName", user.getFullName());
         model.addAttribute("allUsers", buildAllPeopleHashMap());
-        model.addAttribute("motherID", motherID);
-        model.addAttribute("fatherID", fatherID);
-        model.addAttribute("spouseID", spouseID);
+        model.addAttribute("motherID", user.getMotherId());
+        model.addAttribute("fatherID", user.getFatherId());
+        model.addAttribute("spouseID", user.getSpouseId());
         model.addAttribute("formAction", "");
         model.addAttribute("adminLevel", user.getAdmin());
         return "user/profile";
@@ -89,6 +74,9 @@ public class UserController {
         if (errors.hasErrors()) {
             model.addAttribute("user", user);
             model.addAttribute("userName", user.getFullName());
+            model.addAttribute("motherID", user.getMotherId());
+            model.addAttribute("fatherID", user.getFatherId());
+            model.addAttribute("spouseID", user.getSpouseId());
             model.addAttribute("allUsers", buildAllPeopleHashMap());
             model.addAttribute("adminLevel", user.getAdmin());
             model.addAttribute("formAction", "");

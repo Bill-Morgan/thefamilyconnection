@@ -22,16 +22,17 @@
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav mr-4" th:if="${user}">
                 <li class="nav-item" th:if="${adminLevel} > 5">
-                    <a href="/admin"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">My Admin</button></a>
+                    <a href="/admin"><button class="nav-link btn btn-primary btn-lg">Family Admin</button></a>
+<!--                    <a href="/admin"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">My Admin</button></a> -->
                 </li>
                 <li class="nav-item">
-                    <a href="/user"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">My Profile</button></a>
+                    <a href="/user"><button class="nav-link btn btn-primary btn-lg">My Profile</button></a>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">Events</button>
+                    <a href="#"><button class="nav-link btn btn-primary btn-lg">My Events</button></a>
                 </li>
                 <li class="nav-item">
-                    <a href="/logout"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">Logout</button></a>
+                    <a href="/logout"><button class="nav-link btn btn-primary btn-lg">Logout</button></a>
                 </li>
             </ul>
         </div>
@@ -199,14 +200,30 @@
                 <label th:for="primaryEmail">Email</label><br/>
                 <input type="text" th:field="*{primaryEmail}" class="form-control"/>
             </div>
+            <div th:if="${adminID} and ${adminLevel} > 10 and ${adminID} != *{id}" class="form-group col-2">
+                <label for="invite">Send Email Invitation</label><br/>
+                <input type="checkbox" name="invite" id="invite" class="form-control"/>
+            </div>
+            <div th:if="${adminID} and ${adminLevel} > 10 and ${adminID} != *{id}" class="form-group col-2">
+                <label th:for="admin">Set Admin Level (0-10)</label><br/>
+                <input type="text" th:field="*{admin}" class="form-control"/>
+            </div>
         </div>
         <div class="row">
-            <div class="col-5"></div>
-            <div class="col-1 right">
-                <button type="submit" class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">Update</button>
+            <div class="col-2"></div>
+            <div class="col-8">
+                <hr/>
             </div>
-            <div class="col-1">
-                <a href="/user"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">Cancel</button></a>
+        </div>
+        <div class="row" th:if="${adminLevel} > 2">
+            <div class="col-3"></div>
+            <div class="col-6 center">
+                <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                <a href="/user"><button class="btn btn-primary btn-lg">Cancel</button></a>
+                <span th:if="${adminID} and ${adminLevel} > 5 and ${adminID} != *{id}">
+                    <a href="#"><button class="btn btn-danger btn-lg">Revoke Access</button></a>
+                    <a href="#"><button class="btn btn-danger btn-lg">Delete User</button></a>
+                </span>
             </div>
         </div>
     </form>

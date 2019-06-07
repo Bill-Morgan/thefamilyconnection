@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.swing.text.Utilities;
 import javax.validation.Valid;
 import java.util.HashMap;
 
@@ -31,15 +32,31 @@ public class AdminController {
         return allPeopleHashMap;
     }
 
+    @RequestMapping(value="addUser", method = RequestMethod.GET)
+    public String displayNewUserForm(Model model){
+        if (!UtilitiesController.isLoggedIn()) {return ("redirect:/login");}
+        if (userDAO.findOne(UserController.getUserID()).getAdmin() < 5) {return ("redirect:/user");}
+        User adminUser = userDAO.findOne(UserController.getUserID());
+        model.addAttribute("user", new User());
+        model.addAttribute("allUsers", buildAllPeopleHashMap());
+        model.addAttribute("adminID" , UserController.getUserID());
+        model.addAttribute("userName", adminUser.getFullName());
+        model.addAttribute("adminLevel", adminUser.getAdmin());
+        model.addAttribute("formAction", "");
+        return ("admin/newUser");
+    }
+
     @RequestMapping(value="", method = RequestMethod.GET)
     public String adminSelectUser(Model model){
         if (!UtilitiesController.isLoggedIn()) {return ("redirect:/login");}
+        if (userDAO.findOne(UserController.getUserID()).getAdmin() < 5) {return ("redirect:/user");}
         User user = userDAO.findOne(UserController.getUserID());
         model.addAttribute("user", user);
         model.addAttribute("allUsers", buildAllPeopleHashMap());
         model.addAttribute("editUserName", user.getFullName());
         model.addAttribute("userName", user.getFullName());
         model.addAttribute("adminLevel", user.getAdmin());
+        model.addAttribute("adminID" , UserController.getUserID());
         model.addAttribute("formAction", "/admin/userUpdate");
         return "admin/index";
     }
@@ -49,14 +66,37 @@ public class AdminController {
         User adminUser = userDAO.findOne(UserController.getUserID());
         User user = userDAO.findOne(editUser);
         model.addAttribute("user", user);
+        model.addAttribute("motherID", user.getMotherId());
+        model.addAttribute("fatherID", user.getFatherId());
+        model.addAttribute("spouseID", user.getSpouseId());
         model.addAttribute("editUserName", user.getFullName());
         model.addAttribute("allUsers", buildAllPeopleHashMap());
-        model.addAttribute("adminLevel", user.getAdmin());
         model.addAttribute("userName", adminUser.getFullName());
+        model.addAttribute("adminLevel", adminUser.getAdmin());
+        model.addAttribute("adminID" , UserController.getUserID());
+        model.addAttribute("formAction", "/admin/userUpdate");
+        return "admin/index";
+    }
+
+    /*
+    public String loadIndexPage(Integer editUser, Model model){
+        User adminUser = userDAO.findOne(UserController.getUserID());
+        User user = userDAO.findOne(editUser);
+        model.addAttribute("user", user);
+        model.addAttribute("editUserName", user.getFullName());
+        model.addAttribute("allUsers", buildAllPeopleHashMap());
+        model.addAttribute("userName", adminUser.getFullName());
+        model.addAttribute("adminLevel", user.getAdmin());
         model.addAttribute("adminLevel", adminUser.getAdmin());
         model.addAttribute("formAction", "/admin/userUpdate");
         return "admin/index";
+    }
 
+     */
+
+    public String loadIndex(){
+
+        return "admin/index";
     }
 
     @RequestMapping(value="userUpdate", method = RequestMethod.POST)
@@ -66,21 +106,24 @@ public class AdminController {
                                          @RequestParam Integer spouse,
                                          Model model) {
         if (!UtilitiesController.isLoggedIn()) {return ("redirect:/login");}
-        if (errors.hasErrors()) {
-            User adminUser = userDAO.findOne(UserController.getUserID());
-            model.addAttribute("user", user);
-            model.addAttribute("editUserName", user.getFullName());
-            model.addAttribute("allUsers", buildAllPeopleHashMap());
-            model.addAttribute("adminLevel", user.getAdmin());
-            model.addAttribute("userName", adminUser.getFullName());
-            model.addAttribute("adminLevel", adminUser.getAdmin());
-            model.addAttribute("formAction", "/admin/userUpdate");
-            return "admin/index";
+        if (!errors.hasErrors()) {
+            user.setFather(userDAO.findOne(father));
+            user.setMother(userDAO.findOne(mother));
+            user.setSpouse(userDAO.findOne(spouse));
+            user.setPassword(userDAO.findOne(user.getId()).getPassword());
+            userDAO.save(user);
         }
-        user.setFather(userDAO.findOne(father));
-        user.setMother(userDAO.findOne(mother));
-        user.setSpouse(userDAO.findOne(spouse));
-        userDAO.save(user);
-        return("redirect:/admin");
+        User adminUser = userDAO.findOne(UserController.getUserID());
+        model.addAttribute("user", user);
+        model.addAttribute("motherID", user.getMotherId());
+        model.addAttribute("fatherID", user.getFatherId());
+        model.addAttribute("spouseID", user.getSpouseId());
+        model.addAttribute("editUserName", user.getFullName());
+        model.addAttribute("allUsers", buildAllPeopleHashMap());
+        model.addAttribute("userName", adminUser.getFullName());
+        model.addAttribute("adminLevel", adminUser.getAdmin());
+        model.addAttribute("adminID" , UserController.getUserID());
+        model.addAttribute("formAction", "/admin/userUpdate");
+        return("admin/index");
     }
 }

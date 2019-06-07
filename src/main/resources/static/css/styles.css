@@ -22,12 +22,22 @@
 }
 
 hr {
-    color: white;
-    background-color: white;
+    border: 3px solid darkgreen !important;
+    border-radius: 2px !important;
+}
+
+hr.wide {
+    border: 6px solid green !important;
+    border-radius: 5px !important;
+}
+
+.btn {
+    border-radius: 15px !important;
 }
 
 .btn-primary {
     background-color: white !important;
+    border-radius: 15px !important;
     color: black !important;
 }
 

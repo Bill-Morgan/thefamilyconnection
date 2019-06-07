@@ -151,9 +151,11 @@ public class User {
 
     public String getcFullName() {
         String retValue = "";
-        if (!isNullOrEmpty(cFName)) {retValue = cFName;}
+        if (isNullOrEmpty(cFName)) {return "";}
+        retValue = cFName;
         if (!isNullOrEmpty(cMName)) {retValue += (" " + cMName);}
-        if (!isNullOrEmpty(cLName)) {retValue += (" " + cLName);}
+        if (!isNullOrEmpty(cLName)) {return "";}
+        retValue += (" " + cLName);
         if (!isNullOrEmpty(cSuffix)) {retValue += (" " + cSuffix);}
         return retValue;
     }
@@ -226,6 +228,14 @@ public class User {
         return spouse;
     }
 
+    public Integer getSpouseId() {
+        Integer retVal = 0;
+        if (this.getSpouse() != null) {
+            retVal = (this.getSpouse()).getId();
+        }
+        return retVal;
+    }
+
     public void setSpouse(User spouse) {
         this.spouse = spouse;
     }
@@ -246,12 +256,28 @@ public class User {
         this.pob = pob;
     }
 
+    public Integer getFatherId() {
+        Integer retVal = 0;
+        if (this.getFather() != null) {
+            retVal = (this.getFather()).getId();
+        }
+        return retVal;
+    }
+
     public User getFather() {
         return father;
     }
 
     public void setFather(User father) {
         this.father = father;
+    }
+
+    public Integer getMotherId() {
+        Integer retVal = 0;
+        if (this.getMother() != null) {
+            retVal = (this.getMother()).getId();
+        }
+        return retVal;
     }
 
     public User getMother() {

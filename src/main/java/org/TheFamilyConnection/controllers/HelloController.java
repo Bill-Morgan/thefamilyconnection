@@ -9,15 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.management.Query;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-
 @Controller
 @RequestMapping("")
 public class HelloController {
@@ -28,29 +19,28 @@ public class HelloController {
     private UserDAO userDAO;
 
 
-    @RequestMapping(value="")
-    public String index()   throws ParseException  {
-        doit();
+    @RequestMapping(value = "")
+    public String index() {
+//        doit();
         return "redirect:/user";
     }
 
-    @RequestMapping(value="logout")
-    public String logout()  {
+    @RequestMapping(value = "logout")
+    public String logout() {
         UserController.setUserID(-1);
-        return("redirect:/");
+        return ("redirect:/");
     }
 
-
-    @RequestMapping(value="login", method = RequestMethod.GET)
-    public String displayLoginForm(Model model)  {
+    @RequestMapping(value = "login", method = RequestMethod.GET)
+    public String displayLoginForm(Model model) {
         model.addAttribute("action", "Login");
-        return("login");
+        return ("login");
     }
 
-    @RequestMapping(value="login", method = RequestMethod.POST)
+    @RequestMapping(value = "login", method = RequestMethod.POST)
     public String processLoginForm(@RequestParam String username,
                                    @RequestParam String password,
-                                   Model model)  {
+                                   Model model) {
         UserController.setUserID(0);
         for (User users : userDAO.findAll()) {
             if (!User.isNullOrEmpty(users.getPrimaryEmail()) && !User.isNullOrEmpty(users.getPassword())) {
@@ -63,8 +53,11 @@ public class HelloController {
 
         model.addAttribute("errorMsg", "Username or password incorrect");
         model.addAttribute("action", "Login");
-        return("login");
+        return ("login");
     }
+}
+
+/*
 
     public void doit()   throws ParseException {
 
@@ -120,3 +113,4 @@ public class HelloController {
     }
 
 }
+ */

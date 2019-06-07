@@ -17,7 +17,7 @@
                     <h2 class="center">Select User Profile To Edit</h2> <br /> <br />
                 </div>
             </div>
-            <form method="post">
+            <form method="post" action="/admin">
                 <div class="row">
                     <div class="form-group col-6">
                         <label for="editUser">Users</label><br/>
@@ -32,17 +32,21 @@
                </div>
                 <div class="row">
                     <div class="col-6 center">
-                            <button type="submit" class="btn btn-primary btn-lg"> Select </button>
-                            <button type="submit" class="btn btn-primary btn-lg">New</button>
-                            <a href="/user"><button class="btn btn-primary btn-lg">Cancel</button></a>
+                        <button type="submit" class="btn btn-primary btn-lg"> Select </button>
+                        <a href="/admin/addUser"><button class="btn btn-primary btn-lg">Add User</button></a>
+                        <a href="/user"><button class="btn btn-primary btn-lg">Cancel</button></a>
                     </div>
                 </div>
             </form>
             <br/><br/><br/>
         </div>
     </div>
-</div>
-<div class="container-fluid border theme-bg-color">
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <hr class="wide"/>
+        </div>
+    </div>
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
