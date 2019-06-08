@@ -1,7 +1,23 @@
-
+.theme-bg-color {
+    background-color: darkblue;
+    color: white;
+}
 
 .errorMsg {
     color: red;
+}
+
+alert {
+    border: red;
+}
+
+.slidecontainer {
+    width: 100%;
+}
+
+
+input[type="text"][disabled] {
+    background-color: grey;
 }
 
 .pBlock {
@@ -10,11 +26,6 @@
 
 .login {
     width: 600px;
-}
-
-.theme-bg-color {
-    background-color: darkblue;
-    color: white;
 }
 
 .center {

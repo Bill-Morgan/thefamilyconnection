@@ -8,7 +8,7 @@
 <navHeader th:replace="fragments  :: navHeader"></navHeader>
 <h1 class="error center" th:if="${errors}" th:text="'Has Errors'"></h1>
 <div class="container-fluid border theme-bg-color">
-    <div class="row">
+    <div th:unless="${formAction} == '/admin/addUser'"  class="row">
         <div class="col-4"></div>
         <div class="col-8">
             <div class="row">
@@ -33,8 +33,8 @@
                 <div class="row">
                     <div class="col-6 center">
                         <button type="submit" class="btn btn-primary btn-lg"> Select </button>
-                        <a href="/admin/addUser"><button class="btn btn-primary btn-lg">Add User</button></a>
-                        <a href="/user"><button class="btn btn-primary btn-lg">Cancel</button></a>
+                        <a href="/admin/addUser"><button type="button" class="btn btn-primary btn-lg">Add User</button></a>
+                        <a href="/user"><button type="button" class="btn btn-primary btn-lg">Cancel</button></a>
                     </div>
                 </div>
             </form>
@@ -50,7 +50,7 @@
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
-            <h3 class="center theme-bg-color" th:text="'Profile for: ' + ${editUserName}"></h3>
+            <h3 th:text="(${formAction} == '/admin/addUser')? 'New User Profile' : 'Profile for: ' + ${editUserName}" class="center theme-bg-color"></h3>
         </div>
     </div>
     <div th:replace="fragments :: pBlock"></div>
