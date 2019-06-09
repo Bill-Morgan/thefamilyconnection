@@ -13,10 +13,16 @@
         function confirmDelete() {
             var retVal = prompt("Are you sure that you want to delete this user?\n\n                     Type \"YES\" to confirm");
             if (retVal.toLowerCase() == 'yes') {
-                var delURL = "/admin/delete?uid=" + document.getElementById("id").value;
+                var delURL = "/admin/deleteUser/" + document.getElementById("id").value;
                 open(delURL,"_self");
             }
         }
+        function revokeAccesss() {
+            document.getElementById('admin').value='0';
+            var slider = document.getElementById("admin");
+            var output = document.getElementById("adminVal");
+            output.innerHTML = slider.value;
+            alert("Admin Level set to 0!");}
         //-->
     </script>
 </head>
@@ -159,8 +165,10 @@
                 <select name="mother" id="mother" class="form-control">
                     <option value="-1">Select</option>
                     <option value="0"></option>
-                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
-                            th:selected="${motherID} == ${eachUser.key}"></option>
+<!--                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
+                            th:selected="${motherID} == ${eachUser.key}"></option>  -->
+                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.id}" th:text="${eachUser.getFullNameBday()}"
+                            th:selected="${motherID} == ${eachUser.id}"></option>
                 </select>
             </div>
             <div class="form-group col-2">
@@ -168,8 +176,9 @@
                 <select name="father" id="father" class="form-control">
                     <option value="-1">Select</option>
                     <option value="0"></option>
-                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
-                            th:selected="${fatherID} == ${eachUser.key}"></option>
+<!--                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}" -->
+                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.id}" th:text="${eachUser.getFullNameBday()}"
+                            th:selected="${fatherID} == ${eachUser.id}"></option>
                 </select>
             </div>
             <div class="form-group col-2">
@@ -177,8 +186,9 @@
                 <select name="spouse" id="spouse" class="form-control">
                     <option value="-1">Select</option>
                     <option value="0"></option>
-                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
-                            th:selected="${spouseID} == ${eachUser.key}"></option>
+<!--                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"-->
+                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.id}" th:text="${eachUser.getFullNameBday()}"
+                            th:selected="${spouseID} == ${eachUser.id}"></option>
                 </select>
             </div>
             <div class="form-group col-2">
@@ -219,7 +229,7 @@
                 <label th:for="admin">Set Admin Level (0-10)</label><br/>
                 <input type="text" th:field="*{admin}" class="form-control"/>
             </div> -->
-            <div class="slidecontainer col-2">
+            <div th:if="${adminID} and ${adminLevel} > 10 and ${adminID} != *{id}" class="slidecontainer col-2">
                 <label th:for="admin"> Admin Level</label>  <span id="adminVal"></span>
                 <input  th:field="*{admin}" type="range" min="0" max="10" class="form-control"/>
             </div>
@@ -246,14 +256,6 @@
                 <a href="/user"><button type="button" class="btn btn-primary btn-lg">Cancel</button></a>
                 <span th:if="${adminID} and ${adminLevel} > 5 and ${adminID} != *{id} and ${formAction} != '/admin/addUser'">
                     <button type="button" class="btn btn-danger btn-lg" onclick="revokeAccesss()">Revoke Access</button>
-                    <script>
-                        function revokeAccesss() {
-                            document.getElementById('admin').value='0';
-                            var slider = document.getElementById("admin");
-                            var output = document.getElementById("adminVal");
-                            output.innerHTML = slider.value;
-                            alert("Admin Level set to 0!");}
-                    </script>
                     <a href="#"><button type="button" class="btn btn-danger btn-lg" onclick="confirmDelete()">Delete User</button></a>
                 </span>
             </div>

@@ -1,5 +1,6 @@
 package org.TheFamilyConnection.controllers;
 
+import org.TheFamilyConnection.comparators.NameComparator;
 import org.TheFamilyConnection.models.User;
 import org.TheFamilyConnection.models.data.EmailAddressDao;
 import org.TheFamilyConnection.models.data.UserDAO;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequestMapping("user")
@@ -25,6 +27,8 @@ public class UserController {
     @Autowired
     private EmailAddressDao emailAddressDao;
 
+    private NameComparator comparator = new NameComparator();
+
     // this is the id of the currently logged in user
     private static Integer userID = -1;
 
@@ -35,23 +39,31 @@ public class UserController {
     public static void setUserID(Integer userID) {
         UserController.userID = userID;
     }
-
-    private HashMap<Integer, String> buildAllPeopleHashMap(){
+/*
+    private HashMap<Integer, String> buildAllPeopleHashMap() {
         HashMap<Integer, String> allPeopleHashMap = new HashMap<>();
-        for (User eachUser : userDAO.findAll()) {
+        List<User> allUsers = userDAO.findByActive(Boolean.TRUE);
+        allUsers.sort(comparator);
+        for (User eachUser : allUsers) {
             allPeopleHashMap.put(eachUser.getId(), eachUser.getFullName());
         }
         return allPeopleHashMap;
     }
 
-    @RequestMapping(value="")
-    public String index(){
-        return ("redirect:/user/profile");
+
+ */
+
+    private List<User> buildAllPeopleHashMap() {
+        List<User> allUsers = userDAO.findByActive(Boolean.TRUE);
+        allUsers.sort(comparator);
+        return allUsers;
     }
 
-    @RequestMapping(value="profile", method = RequestMethod.GET)
-    public String displayUserProfileForm(Model model) {
-        if (!UtilitiesController.isLoggedIn()) {return ("redirect:/login");}
+
+    private String buildProfileModel(Model model) {
+        if (!UtilitiesController.isLoggedIn()) {
+            return ("redirect:/login");
+        }
         User user = userDAO.findOne(userID);
         model.addAttribute("user", user);
         model.addAttribute("userName", user.getFullName());
@@ -64,28 +76,31 @@ public class UserController {
         return "user/profile";
     }
 
-    @RequestMapping(value="profile", method = RequestMethod.POST)
+    @RequestMapping(value = "")
+    public String index() {
+        return ("redirect:/user/profile");
+    }
+
+    @RequestMapping(value = "profile", method = RequestMethod.GET)
+    public String displayUserProfileForm(Model model) {
+        return (buildProfileModel(model));
+    }
+
+    @RequestMapping(value = "profile", method = RequestMethod.POST)
     public String processUserProfileForm(@ModelAttribute @Valid User user, Errors errors,
                                          @RequestParam Integer mother,
                                          @RequestParam Integer father,
                                          @RequestParam Integer spouse,
                                          Model model) {
-        if (!UtilitiesController.isLoggedIn()) {return ("redirect:/login");}
-        if (errors.hasErrors()) {
-            model.addAttribute("user", user);
-            model.addAttribute("userName", user.getFullName());
-            model.addAttribute("motherID", user.getMotherId());
-            model.addAttribute("fatherID", user.getFatherId());
-            model.addAttribute("spouseID", user.getSpouseId());
-            model.addAttribute("allUsers", buildAllPeopleHashMap());
-            model.addAttribute("adminLevel", user.getAdmin());
-            model.addAttribute("formAction", "");
-            return "user/profile";
+        if (!UtilitiesController.isLoggedIn()) {
+            return ("redirect:/login");
         }
-        user.setMother(userDAO.findOne(mother));
-        user.setFather(userDAO.findOne(father));
-        user.setSpouse(userDAO.findOne(spouse));
-        userDAO.save(user);
-        return("redirect:/admin");
+        if (!errors.hasErrors()) {
+            user.setMother(userDAO.findOne(mother));
+            user.setFather(userDAO.findOne(father));
+            user.setSpouse(userDAO.findOne(spouse));
+            userDAO.save(user);
+        }
+        return (buildProfileModel(model));
     }
 }

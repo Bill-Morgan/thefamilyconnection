@@ -1,18 +1,17 @@
 package org.TheFamilyConnection.controllers;
 
+import org.TheFamilyConnection.comparators.NameComparator;
 import org.TheFamilyConnection.models.User;
 import org.TheFamilyConnection.models.data.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequestMapping("admin")
@@ -23,12 +22,12 @@ public class AdminController {
 
     private UtilitiesController utilitiesController;
 
-    private HashMap<Integer, String> buildAllPeopleHashMap() {
-        HashMap<Integer, String> allPeopleHashMap = new HashMap<>();
-        for (User eachUser : userDAO.findAll()) {
-            allPeopleHashMap.put(eachUser.getId(), eachUser.getFullNameBday());
-        }
-        return allPeopleHashMap;
+    private NameComparator comparator = new NameComparator();
+
+    private List<User> buildAllPeopleHashMap() {
+        List<User> allUsers = userDAO.findByActive(Boolean.TRUE);
+        allUsers.sort(comparator);
+        return allUsers;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -41,6 +40,32 @@ public class AdminController {
         return (loadIndexPage(editUser, "/admin/userUpdate", model));
     }
 
+    @RequestMapping(value="deleteUser/{userID}", method = RequestMethod.GET)
+    public String processDeleteUser(@PathVariable Integer userID, Model model) {
+        if (!UtilitiesController.isLoggedIn()) {
+            return ("redirect:/login");
+        }
+        if (userDAO.findOne(UserController.getUserID()).getAdmin() < 5) {
+            return ("redirect:/user");
+        }
+        User user = userDAO.findOne(userID);
+        for (User eachUser : userDAO.findByFatherOrMotherOrSpouse(user, user, user)) {
+            if (eachUser.getMother() == user) {
+                eachUser.setMother(null);
+            }
+            if (eachUser.getFather() == user) {
+                eachUser.setFather(null);
+            }
+            if (eachUser.getSpouse() == user) {
+                eachUser.setSpouse(null);
+            }
+            userDAO.save(eachUser);
+        }
+        user.setActive(Boolean.FALSE);
+        userDAO.save(user);
+        model.addAttribute("alertMsg", "User Deleted");
+        return (loadIndexPage(UserController.getUserID(), "/admin/userUpdate", model));
+    }
 
     @RequestMapping(value = "userUpdate", method = RequestMethod.POST)
     public String processAdminUserUpdate(@ModelAttribute @Valid User user, Errors errors,
@@ -56,6 +81,7 @@ public class AdminController {
             user.setMother(userDAO.findOne(mother));
             user.setSpouse(userDAO.findOne(spouse));
             user.setPassword(userDAO.findOne(user.getId()).getPassword());
+            user.setActive(userDAO.findOne(user.getId()).getActive());
             userDAO.save(user);
         }
         return(loadIndexPage(user.getId(), "/admin/userUpdate", model));
@@ -66,6 +92,25 @@ public class AdminController {
         return (loadIndexPage(0, "/admin/addUser", model));
     }
 
+    @RequestMapping(value = "addUser", method = RequestMethod.POST)
+    public String processNewUserForm(@ModelAttribute @Valid User user, Errors errors,
+                                    @RequestParam Integer mother,
+                                    @RequestParam Integer father,
+                                    @RequestParam Integer spouse,
+                                    Model model) {
+        if (!UtilitiesController.isLoggedIn()) {
+            return ("redirect:/login");
+        }
+        if (!errors.hasErrors()) {
+            user.setFather(userDAO.findOne(father));
+            user.setMother(userDAO.findOne(mother));
+            user.setSpouse(userDAO.findOne(spouse));
+            user.setActive(Boolean.TRUE);
+            userDAO.save(user);
+        }
+        model.addAttribute("alertMsg", "New User Saved");
+        return(loadIndexPage(user.getId(), "", model));
+    }
 
     private String loadIndexPage(Integer userID, String formAction, Model model) {
         if (!UtilitiesController.isLoggedIn()) {

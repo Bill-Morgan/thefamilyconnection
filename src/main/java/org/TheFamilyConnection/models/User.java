@@ -57,6 +57,9 @@ public class User {
 
     private String zip;
 
+    @Column(columnDefinition = "tinyint default 1")
+    private Boolean active;
+
     @Column(columnDefinition = "int default 0")
     private Integer admin;
 
@@ -91,6 +94,14 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Integer getAdmin() {
@@ -149,30 +160,40 @@ public class User {
         this.bSuffix = bSuffix;
     }
 
-    public String getcFullName() {
+    public String getFName(){
         String retValue = "";
-        if (isNullOrEmpty(cFName)) {return "";}
-        retValue = cFName;
-        if (!isNullOrEmpty(cMName)) {retValue += (" " + cMName);}
-        if (!isNullOrEmpty(cLName)) {return "";}
-        retValue += (" " + cLName);
-        if (!isNullOrEmpty(cSuffix)) {retValue += (" " + cSuffix);}
-        return retValue;
+        if (isNullOrEmpty(cFName) || isNullOrEmpty(cLName)) {
+            return (bFName);
+        }
+        return (cFName);
     }
 
-    public String getbFullName() {
+    public String getMName() {
         String retValue = "";
-        if (!isNullOrEmpty(bFName)) {retValue = bFName;}
-        if (!isNullOrEmpty(bMName)) {retValue += (" " + bMName);}
-        if (!isNullOrEmpty(bLName)) {retValue += (" " + bLName);}
-        if (!isNullOrEmpty(bSuffix)) {retValue += (" " + bSuffix);}
-        return retValue;
+        if (isNullOrEmpty(cFName) || isNullOrEmpty(cLName)) {
+            return (bMName);
+        }
+        return (cMName);
+    }
+
+    public String getLName() {
+        String retValue = "";
+        if (isNullOrEmpty(cFName) || isNullOrEmpty(cLName)) {
+            return (bLName);
+        }
+        return (cLName);
+    }
+
+    public String getSuffix() {
+        String retValue = "";
+        if (isNullOrEmpty(cFName) || isNullOrEmpty(cLName)) {
+            return (bSuffix);
+        }
+        return (cSuffix);
     }
 
     public String getFullName() {
-        String retValue = getcFullName();
-        if (isNullOrEmpty(retValue)) {retValue = getbFullName();}
-        return retValue;
+        return(getFName() + " " + getMName() + " " + getLName() + " " + getSuffix());
     }
 
     public String getFullNameBday() {

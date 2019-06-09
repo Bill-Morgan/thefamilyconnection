@@ -6,8 +6,12 @@
 </head>
 <body>
 <navHeader th:replace="fragments  :: navHeader"></navHeader>
-<h1 class="error center" th:if="${errors}" th:text="'Has Errors'"></h1>
+<h1 th:if="${errors}" class="error center" th:text="'Has Errors'"></h1>
 <div class="container-fluid border theme-bg-color">
+    <div th:if="${alertMsg}" class="row">
+        <div class="col-4"></div>
+        <div class="col-4 error center" th:text="${alertMsg}"></div>
+    </div>
     <div th:unless="${formAction} == '/admin/addUser'"  class="row">
         <div class="col-4"></div>
         <div class="col-8">
@@ -24,8 +28,8 @@
                         <select name="editUser" id="editUser" class="form-control">
                             <option value="-1">Select</option>
                             <option value="0"></option>
-                            <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
-                                th:selected="${eachUser.key} == ${user.id}">
+                            <option th:each="eachUser: ${allUsers}" th:value="${eachUser.id}" th:text="${eachUser.getFullNameBday()}"
+                                th:selected="${eachUser.id} == ${user.id}">
                             </option>
                         </select>
                     </div>

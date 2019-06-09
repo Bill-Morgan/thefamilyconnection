@@ -17,6 +17,7 @@ public class HelloController {
 
     @Autowired
     private UserDAO userDAO;
+    private Iterable<User> all;
 
 
     @RequestMapping(value = "")
