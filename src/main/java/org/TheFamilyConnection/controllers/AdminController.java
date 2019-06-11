@@ -10,7 +10,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -24,7 +23,7 @@ public class AdminController {
 
     private NameComparator comparator = new NameComparator();
 
-    private List<User> buildAllPeopleHashMap() {
+    private List<User> buildAllPeopleList() {
         List<User> allUsers = userDAO.findByActive(Boolean.TRUE);
         allUsers.sort(comparator);
         return allUsers;
@@ -131,7 +130,7 @@ public class AdminController {
         model.addAttribute("fatherID", user.getFatherId());
         model.addAttribute("spouseID", user.getSpouseId());
         model.addAttribute("editUserName", user.getFullName());
-        model.addAttribute("allUsers", buildAllPeopleHashMap());
+        model.addAttribute("allUsers", buildAllPeopleList());
         model.addAttribute("userName", adminUser.getFullName());
         model.addAttribute("adminLevel", adminUser.getAdmin());
         model.addAttribute("adminID", UserController.getUserID());

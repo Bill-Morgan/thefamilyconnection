@@ -202,7 +202,20 @@ public class User {
         String pattern = "MM/dd/yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(getDob());
+//        String date = simpleDateFormat.format(getBirthDay());
         return retValue + " " + date;
+    }
+
+    public String getBirthDay() {
+        String retVal;
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
+        try {
+            retVal = sdf.format(getDob());
+//            retVal = new SimpleDateFormat("dd/MM").parse(sdf.format(getDob()));
+        } catch (Exception e) {
+            retVal = null;
+        }
+        return retVal;
     }
 
     public String getcLName() {

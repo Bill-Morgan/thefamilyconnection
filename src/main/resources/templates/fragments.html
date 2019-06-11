@@ -29,15 +29,18 @@
 <body>
 <navHeader th:fragment="navHeader">
     <!-- navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav th:unless="${userName}" class="navbar navbar-expand-lg fixed-top">
+        <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
+    </nav>
+    <nav th:if="${userName}" class="navbar navbar-expand-lg fixed-top">
         <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
 
-        <h3 th:if="${userName}" th:text="'User: ' + ${userName}"></h3>
+        <h3 th:text="'User: ' + ${userName}"></h3>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
-            <ul class="navbar-nav mr-4" th:if="${user}">
+            <ul class="navbar-nav mr-4">
                 <li class="nav-item" th:if="${adminLevel} > 5">
                     <a href="/admin"><button class="nav-link btn btn-primary btn-lg">Family Admin</button></a>
 <!--                    <a href="/admin"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">My Admin</button></a> -->
@@ -46,7 +49,7 @@
                     <a href="/user"><button class="nav-link btn btn-primary btn-lg">My Profile</button></a>
                 </li>
                 <li class="nav-item">
-                    <a href="#"><button class="nav-link btn btn-primary btn-lg">My Events</button></a>
+                    <a href="/events"><button class="nav-link btn btn-primary btn-lg">My Events</button></a>
                 </li>
                 <li class="nav-item">
                     <a href="/logout"><button class="nav-link btn btn-primary btn-lg">Logout</button></a>

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("")
 public class HelloController {
@@ -43,15 +45,10 @@ public class HelloController {
                                    @RequestParam String password,
                                    Model model) {
         UserController.setUserID(0);
-        for (User users : userDAO.findAll()) {
-            if (!User.isNullOrEmpty(users.getPrimaryEmail()) && !User.isNullOrEmpty(users.getPassword())) {
-                if (users.getPrimaryEmail().toLowerCase().equals(username.toLowerCase()) & users.getPassword().equals(password)) {
-                    UserController.setUserID(users.getId());
-                    return ("redirect:/user");
-                }
-            }
-        }
-
+        User user = userDAO.findFirstByPrimaryEmailAndPassword(username.toLowerCase(), password);
+        if (user != null) {
+            UserController.setUserID(user.getId());
+            return ("redirect:/user");}
         model.addAttribute("errorMsg", "Username or password incorrect");
         model.addAttribute("action", "Login");
         return ("login");
@@ -60,7 +57,7 @@ public class HelloController {
 
 /*
 
-    public void doit()   throws ParseException {
+    public void doit() {
 
         String csvFile = "/kalaher.csv";
         String line = "";
