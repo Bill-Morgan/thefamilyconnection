@@ -61,7 +61,7 @@ public class User {
     private Boolean active;
 
     @Column(columnDefinition = "int default 0")
-    private Integer admin;
+    private Integer admin = 0;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date anniversary;
@@ -205,6 +205,18 @@ public class User {
 //        String date = simpleDateFormat.format(getBirthDay());
         return retValue + " " + date;
     }
+
+    public String getBirthMonth() {
+        String retVal;
+        SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        try {
+            retVal = sdf.format(getDob());
+        } catch (Exception e) {
+            retVal = null;
+        }
+        return retVal;
+    }
+
 
     public String getBirthDay() {
         String retVal;

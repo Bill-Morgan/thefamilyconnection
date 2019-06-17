@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -39,26 +38,12 @@ public class UserController {
     public static void setUserID(Integer userID) {
         UserController.userID = userID;
     }
-/*
-    private HashMap<Integer, String> buildAllPeopleHashMap() {
-        HashMap<Integer, String> allPeopleHashMap = new HashMap<>();
-        List<User> allUsers = userDAO.findByActive(Boolean.TRUE);
-        allUsers.sort(comparator);
-        for (User eachUser : allUsers) {
-            allPeopleHashMap.put(eachUser.getId(), eachUser.getFullName());
-        }
-        return allPeopleHashMap;
-    }
 
-
- */
-
-    private List<User> buildAllPeopleHashMap() {
-        List<User> allUsers = userDAO.findByActive(Boolean.TRUE);
+    private List<User> getAllUsers() {
+        List<User> allUsers = userDAO.findByActiveIsTrue();
         allUsers.sort(comparator);
         return allUsers;
     }
-
 
     private String buildProfileModel(Model model) {
         if (!UtilitiesController.isLoggedIn()) {
@@ -67,7 +52,7 @@ public class UserController {
         User user = userDAO.findOne(userID);
         model.addAttribute("user", user);
         model.addAttribute("userName", user.getFullName());
-        model.addAttribute("allUsers", buildAllPeopleHashMap());
+        model.addAttribute("allUsers", getAllUsers());
         model.addAttribute("motherID", user.getMotherId());
         model.addAttribute("fatherID", user.getFatherId());
         model.addAttribute("spouseID", user.getSpouseId());
@@ -99,6 +84,9 @@ public class UserController {
             user.setMother(userDAO.findOne(mother));
             user.setFather(userDAO.findOne(father));
             user.setSpouse(userDAO.findOne(spouse));
+            user.setPassword(userDAO.findOne(user.getId()).getPassword());
+            user.setAdmin(userDAO.findOne(user.getId()).getAdmin());
+            user.setActive(Boolean.TRUE);
             userDAO.save(user);
         }
         return (buildProfileModel(model));

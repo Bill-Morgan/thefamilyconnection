@@ -24,7 +24,7 @@ public class AdminController {
     private NameComparator comparator = new NameComparator();
 
     private List<User> buildAllPeopleList() {
-        List<User> allUsers = userDAO.findByActive(Boolean.TRUE);
+        List<User> allUsers = userDAO.findByActiveIsTrue();
         allUsers.sort(comparator);
         return allUsers;
     }

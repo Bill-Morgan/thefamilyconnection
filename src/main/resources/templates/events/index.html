@@ -7,7 +7,7 @@
 <body>
 <navHeader th:replace="fragments  :: navHeader"></navHeader>
 </body>
-<div class="container-fluid border theme-bg-color">
+<div class="container-fluid border theme-bg-color delayedDiv" id="delayedDiv">
     <br/><br/>
     <div class="row theme-bg-color">
         <div class="col-3"></div>
@@ -15,14 +15,38 @@
             <h1 class="center">Kalaher Family Birthdays and Anniversaries</h1><br/>
             <div class="container-fluid border theme-bg-color">
                 <div class="row"><div class="col-12"> <br/> </div></div>
+                <div class="row">
+                    <div class="col-12 monthName" th:text="${thisMonth} + ' Birthdays'"></div>
+                </div>
                 <div class="row"  th:each="eachUser: ${allUsers}">
-                    <div class="col-3"></div>
-                    <div class="col-6">
+                    <div class="col-2"></div>
+                    <div class="col-8">
                         <h3 th:text="${eachUser.getBirthDay()} + ' ' + ${eachUser.getFullName()}"></h3>
                     </div>
                 </div>
+                <div class="row"><div class="col-12"> <br/> </div></div>
+                <div class="row">
+                    <div class="col-4 right">
+                        <a th:href="'/events/calendar/' + ${theMonthInt - 1}"><button type="button" th:text="${lastMonth} + ' &lt;'" class="btn btn-primary btn-lg">LastMonth</button></a>
+                    </div>
+                    <div class="col-4">
+                        <select name="pickMonth" onchange="loadNewMonth()" id="pickMonth" class="form-control  btn-primary btn-lg">
+                            <option value="-1">See All</option>
+                            <option th:each="eachMonth: ${theMonths}" th:if="${eachMonth.key} != 0 and ${eachMonth.key} != 13" th:value="${eachMonth.key}" th:text="${eachMonth.value}"
+                                    th:selected="${eachMonth.key} == ${theMonthInt}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <a th:href="'/events/calendar/' + ${theMonthInt + 1}"><button type="button" th:text="'&gt; ' + ${nextMonth}" class="btn btn-primary btn-lg">NextMonth</button></a>
+                    </div>
+                </div>
+                <div class="row"><div class="col-12"> <br/> </div></div>
             </div>
         </div>
     </div>
+    <div class="row"><div class="col-12"> <br/> </div></div>
+    <div class="row"><div class="col-12"> <br/> </div></div>
 </div>
+<footer th:replace="fragments :: footer"></footer>
 </html>

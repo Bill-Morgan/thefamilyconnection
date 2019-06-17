@@ -7,7 +7,7 @@
 <body>
 <navHeader th:replace="fragments  :: navHeader"></navHeader>
 <h1 th:if="${errors}" class="error center" th:text="'Has Errors'"></h1>
-<div class="container-fluid border theme-bg-color">
+<div class="container-fluid border theme-bg-color delayedDiv" id="delayedDiv">
     <div th:if="${alertMsg}" class="row">
         <div class="col-4"></div>
         <div class="col-4 error center" th:text="${alertMsg}"></div>
@@ -21,11 +21,11 @@
                     <h2 class="center">Select User Profile To Edit</h2> <br /> <br />
                 </div>
             </div>
-            <form method="post" action="/admin">
+            <form method="post" id="selectUser" action="/admin">
                 <div class="row">
                     <div class="form-group col-6">
-                        <label for="editUser">Users</label><br/>
-                        <select name="editUser" id="editUser" class="form-control">
+                        <label for="editUser">Select User</label><br/>
+                        <select name="editUser" id="editUser" onchange="loadUserProfile()" class="form-control">
                             <option value="-1">Select</option>
                             <option value="0"></option>
                             <option th:each="eachUser: ${allUsers}" th:value="${eachUser.id}" th:text="${eachUser.getFullNameBday()}"
@@ -35,14 +35,17 @@
                     </div>
                </div>
                 <div class="row">
+                    <div class="col-6"><hr/></div>
+                </div>
+                <br/>
+                <div class="row">
                     <div class="col-6 center">
-                        <button type="submit" class="btn btn-primary btn-lg"> Select </button>
                         <a href="/admin/addUser"><button type="button" class="btn btn-primary btn-lg">Add User</button></a>
                         <a href="/user"><button type="button" class="btn btn-primary btn-lg">Cancel</button></a>
                     </div>
                 </div>
             </form>
-            <br/><br/><br/>
+            <br/>
         </div>
     </div>
     <div class="row">
@@ -59,5 +62,6 @@
     </div>
     <div th:replace="fragments :: pBlock"></div>
 </div>
+<footer th:replace="fragments :: footer"></footer>
 </body>
 </html>

@@ -3,9 +3,9 @@
 <head th:fragment="head">
     <meta charset="UTF-8"/>
     <title th:text="${title}">TheFamilyConnection</title>
+
     <link rel="stylesheet" type="text/css" th:href="@{/css/w3.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type = "text/javascript">
@@ -23,6 +23,30 @@
             var output = document.getElementById("adminVal");
             output.innerHTML = slider.value;
             alert("Admin Level set to 0!");}
+
+        function loadNewMonth() {
+            var pickMonthURL = "/events/calendar/" + document.getElementById('pickMonth').value;
+            open(pickMonthURL,"_self");
+        }
+
+        function loadUserProfile() {
+            document.forms["selectUser"].submit();
+        }
+
+        setTimeout(function(){
+            document.getElementById('delayedDiv').style.visibility = "visible";
+        },1000);
+
+        function enableDisableDOD () {
+            var checked = document.getElementById('deceasedCB').checked;
+            if (checked) {
+                document.getElementById('dod').disabled = false;
+            } else {
+                document.getElementById('dod').value = null;
+                document.getElementById('dod').disabled = true;
+            }
+
+        }
         //-->
     </script>
 </head>
@@ -41,7 +65,7 @@
         </button>
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav mr-4">
-                <li class="nav-item" th:if="${adminLevel} > 5">
+                <li class="nav-item" th:if="${adminLevel} >= 5">
                     <a href="/admin"><button class="nav-link btn btn-primary btn-lg">Family Admin</button></a>
 <!--                    <a href="/admin"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">My Admin</button></a> -->
                 </li>
@@ -147,18 +171,14 @@
                 <input type="text" th:field="*{pob}" class="form-control"/>
                 <span th:errors="*{pob}" class="errorMsg"></span>
             </div>
-            <!-- todo: show the dod only if admin -->
-            <div th:if="${admin}">
-                <div class="form-group col-2">
-                    <label th:disabled="diabled" th:for="dod">Date of death</label><br/>
-                    <input type="date" th:field="*{dod}" class="form-control" disabled="disabled" />
-                    <span th:errors="*{dod}" class="errorMsg"></span>
-                </div>
-                <!-- todo: javascript to respond to deceased checkbox to enable/disable dod box -->
-                <div class="form-group col-2">
-                    <label>Deceased</label><br/>
-                    <input type="checkbox" name="deceased"/>
-                </div>
+            <div  th:if="${adminID} and ${adminLevel} >= 5 and ${adminID} != *{id}" class="form-group col-2" onchange="enableDisableDOD()">
+                <label for="deceasedCB">Deceased</label><br/>
+                <input type="checkbox" name="deceasedCB" id="deceasedCB" class="form-control center" />
+            </div>
+            <div  th:if="${adminID} and ${adminLevel} >= 5 and ${adminID} != *{id}" class="form-group col-2">
+                <label th:for="dod">Date of death</label><br/>
+                <input type="date" th:field="*{dod}" class="form-control" disabled="disabled" />
+                <span th:errors="*{dod}" class="errorMsg"></span>
             </div>
         </div>
         <div class="row">
@@ -224,15 +244,11 @@
                 <label th:for="primaryEmail">Email</label><br/>
                 <input type="email" th:field="*{primaryEmail}" class="form-control"/>
             </div>
-            <div th:if="${adminID} and ${adminLevel} > 10 and ${adminID} != *{id}" class="form-group col-2">
+            <div th:if="${adminID} and ${adminLevel} >= 5 and ${adminID} != *{id}" class="form-group col-2">
                 <label for="invite">Send Email Invitation</label><br/>
                 <input type="checkbox" name="invite" id="invite" class="form-control" /> <!--onclick="document.getElementById('IdOfTheTextbox').disabled=this.checked;"-->
             </div>
-            <!--<div th:if="${adminID} and ${adminLevel} > 10 and ${adminID} != *{id}" class="form-group col-2">
-                <label th:for="admin">Set Admin Level (0-10)</label><br/>
-                <input type="text" th:field="*{admin}" class="form-control"/>
-            </div> -->
-            <div th:if="${adminID} and ${adminLevel} > 10 and ${adminID} != *{id}" class="slidecontainer col-2">
+            <div th:if="${adminID} and ${adminLevel} >= 5 and ${adminID} != *{id}" class="slidecontainer col-2">
                 <label th:for="admin"> Admin Level</label>  <span id="adminVal"></span>
                 <input  th:field="*{admin}" type="range" min="0" max="10" class="form-control"/>
             </div>
