@@ -14,5 +14,5 @@ public interface UserDAO extends CrudRepository<User, Integer> {
     List<User> findByActiveIsTrueAndDobNotNull();
     List<User> findByFatherOrMotherOrSpouse(User father, User mother, User spouse);
     User findFirstByPrimaryEmailAndPassword(String username, String password);
-
+    List<User> findByActiveIsTrueAndSpouseNotNullAndAnniversaryNotNull();
 }

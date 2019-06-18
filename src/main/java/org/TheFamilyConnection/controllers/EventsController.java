@@ -1,6 +1,7 @@
 package org.TheFamilyConnection.controllers;
 
 import com.fasterxml.jackson.databind.node.BooleanNode;
+import org.TheFamilyConnection.comparators.AnniversaryComparator;
 import org.TheFamilyConnection.comparators.BirthdayComparator;
 import org.TheFamilyConnection.models.User;
 import org.TheFamilyConnection.models.data.UserDAO;
@@ -23,11 +24,12 @@ public class EventsController {
 
     private UtilitiesController utilitiesController;
 
-    private BirthdayComparator comparator = new BirthdayComparator();
+    private BirthdayComparator comparatorBD = new BirthdayComparator();
+
+    private AnniversaryComparator comparatorAnn = new AnniversaryComparator();
 
     private List<User> getAllUsers(Integer month) {
         List<User> allUsers = userDAO.findByActiveIsTrueAndDobNotNull();
-        allUsers.sort(comparator);
         if (month == 0) { return allUsers;}
         List<User> filteredUsers = new ArrayList<>();
         for (User eachUser : allUsers) {
@@ -35,6 +37,19 @@ public class EventsController {
                 filteredUsers.add(eachUser);
             }
         }
+        filteredUsers.sort(comparatorBD);
+        return filteredUsers;
+    }
+
+    private List<User> getAllWSpouse(Integer month) {
+        List<User> allUsers = userDAO.findByActiveIsTrueAndSpouseNotNullAndAnniversaryNotNull();
+        List<User> filteredUsers = new ArrayList<>();
+        for (User eachUser : allUsers) {
+            if (Integer.parseInt(eachUser.getAnniversaryMonth()) == month) {
+                filteredUsers.add(eachUser);
+            }
+        }
+        allUsers.sort(comparatorAnn);
         return filteredUsers;
     }
 
@@ -82,29 +97,18 @@ public class EventsController {
     }
 
     private String buildEventsPageModel(Model model, Integer theMonthInt) {
-        HashMap<Integer, String> theMonths = new HashMap<>();
-        theMonths.put(0, "December");
-        theMonths.put(1, "January");
-        theMonths.put(2, "February");
-        theMonths.put(3, "March");
-        theMonths.put(4, "April");
-        theMonths.put(5, "May");
-        theMonths.put(6, "June");
-        theMonths.put(7, "July");
-        theMonths.put(8, "August");
-        theMonths.put(9, "September");
-        theMonths.put(10, "October");
-        theMonths.put(11, "November");
-        theMonths.put(12, "December");
-        theMonths.put(13, "January");
+        List<String> theMonths = Arrays.asList("December", "January", "February", "March", "April",
+                                            "May", "June", "July", "August", "September", "October",
+                                            "November", "December", "January");
         User adminUser = userDAO.findOne(UserController.getUserID());
         model.addAttribute("adminLevel", adminUser.getAdmin());
         model.addAttribute("userName", adminUser.getFullName());
-        model.addAttribute("adminID", UserController.getUserID());
+        model.addAttribute("adminID", adminUser.getId());
         model.addAttribute("theMonths", theMonths);
         model.addAttribute("lastMonth", theMonths.get(theMonthInt - 1));
         model.addAttribute("thisMonth", theMonths.get(theMonthInt));
         model.addAttribute("nextMonth", theMonths.get(theMonthInt + 1));
+        model.addAttribute("anniversaries", getAllWSpouse(theMonthInt));
         model.addAttribute("theMonthInt", theMonthInt);
         model.addAttribute("allUsers", getAllUsers(theMonthInt));
         return "events/index";

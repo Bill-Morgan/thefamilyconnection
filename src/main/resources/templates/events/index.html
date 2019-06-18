@@ -20,8 +20,27 @@
                 </div>
                 <div class="row"  th:each="eachUser: ${allUsers}">
                     <div class="col-2"></div>
-                    <div class="col-8">
+<!--                    <div class="col-8">
                         <h3 th:text="${eachUser.getBirthDay()} + ' ' + ${eachUser.getFullName()}"></h3>
+                    </div> -->
+                    <div class="col-2">
+                        <h3 th:text="${eachUser.getBirthDay()}"></h3>
+                    </div>
+                    <div class="col-6">
+                        <h3 th:text="${eachUser.getFullName()}"></h3>
+                    </div>
+                </div>
+                <div class="row"><div class="col-12"> <br/> </div></div>
+                <div class="row">
+                    <div class="col-12 monthName" th:text="${thisMonth} + ' Anniversaries'"></div>
+                </div>
+                <div class="row" th:each="eachUser: ${anniversaries}">
+                    <div class="col-2"></div>
+                    <div class="col-2">
+                        <h3 th:text="${eachUser.getAnniversaryDay()}"></h3>
+                    </div>
+                    <div class="col-6">
+                        <h3 th:text="${eachUser.getFullName()}"></h3>
                     </div>
                 </div>
                 <div class="row"><div class="col-12"> <br/> </div></div>
@@ -31,9 +50,9 @@
                     </div>
                     <div class="col-4">
                         <select name="pickMonth" onchange="loadNewMonth()" id="pickMonth" class="form-control  btn-primary btn-lg">
-                            <option value="-1">See All</option>
-                            <option th:each="eachMonth: ${theMonths}" th:if="${eachMonth.key} != 0 and ${eachMonth.key} != 13" th:value="${eachMonth.key}" th:text="${eachMonth.value}"
-                                    th:selected="${eachMonth.key} == ${theMonthInt}">
+                            <!--<option value="-1">See All</option> todo: make a view all option -->
+                            <option th:each="eachMonth, iter: ${theMonths}" th:if="${iter.index} != 0 and ${iter.index} != 13" th:value="${iter.index}" th:text="${eachMonth}"
+                                    th:selected="${iter.index} == ${theMonthInt}">
                             </option>
                         </select>
                     </div>

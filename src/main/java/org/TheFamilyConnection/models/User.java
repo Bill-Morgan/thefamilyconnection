@@ -196,38 +196,51 @@ public class User {
         return(getFName() + " " + getMName() + " " + getLName() + " " + getSuffix());
     }
 
+    private String getMonth(Date theDate) {
+        String retVal = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        try {
+            retVal = sdf.format(theDate);
+        } catch (Exception e) {
+            retVal = null;
+        }
+        return retVal;
+    }
+
+    public String getBirthMonth() {
+        return getMonth(getDob());
+    }
+
+    public String getAnniversaryMonth() {
+        return getMonth(getAnniversary());
+    }
+
+    private String getMMdd(Date theDate) {
+        String retVal;
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
+        try {
+            retVal = sdf.format(theDate);
+        } catch (Exception e) {
+            retVal = null;
+        }
+        return retVal;
+    }
+
+    public String getBirthDay() {
+        return getMMdd(getDob());
+    }
+
     public String getFullNameBday() {
         String retValue = getFullName();
         if (getDob() == null) { return retValue;}
         String pattern = "MM/dd/yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(getDob());
-//        String date = simpleDateFormat.format(getBirthDay());
         return retValue + " " + date;
     }
 
-    public String getBirthMonth() {
-        String retVal;
-        SimpleDateFormat sdf = new SimpleDateFormat("MM");
-        try {
-            retVal = sdf.format(getDob());
-        } catch (Exception e) {
-            retVal = null;
-        }
-        return retVal;
-    }
-
-
-    public String getBirthDay() {
-        String retVal;
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
-        try {
-            retVal = sdf.format(getDob());
-//            retVal = new SimpleDateFormat("dd/MM").parse(sdf.format(getDob()));
-        } catch (Exception e) {
-            retVal = null;
-        }
-        return retVal;
+    public String getAnniversaryDay() {
+        return getMMdd(getAnniversary());
     }
 
     public String getcLName() {
