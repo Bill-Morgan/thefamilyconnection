@@ -1,0 +1,34 @@
+
+
+.errorMsg {
+    color: red;
+}
+
+.pBlock {
+    width: 600px;
+}
+
+.login {
+    width: 600px;
+}
+
+.theam-bg-color {
+    background-color: darkblue;
+    color: white;
+}
+
+.center {
+    text-align: center;
+}
+
+hr {
+    color: white;
+    background-color: white;
+}
+
+.navbar{ background:#4AAE52;}
+.nav-link , .navbar-brand{ color: #f4f4f4; cursor: pointer;}
+.nav-link{ margin-right: 1em !important;}
+.nav-link:hover{ background: #f4f4f4; color: #f97300; }
+.navbar-collapse{ justify-content: flex-end;}
+.navbar-toggler{  background:#fff !important;}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8" />
+    <title th:text="${title}">Title</title>
+</head>
+<body>
+<navHeader th:replace="fragments  :: navHeader"></navHeader>
+<h1 class="error center" th:if="${errors}" th:text="'Has Errors'"></h1>
+<div class="container-fluid border theam-bg-color">
+    <div class="row">
+        <div class="col-12 center">
+            <br/><br/>
+            <h1 class="center">My Profile</h1> <br /> <br />
+        </div>
+    </div>
+    <div th:replace="fragments :: pBlock"></div>
+</div>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>

@@ -81,6 +81,10 @@ public class AdminController {
             user.setSpouse(userDAO.findOne(spouse));
             user.setPassword(userDAO.findOne(user.getId()).getPassword());
             user.setActive(userDAO.findOne(user.getId()).getActive());
+            // this prevents and admin user from altering their admin level.
+            if (user.getId() ==  UserController.getUserID()) {
+                user.setAdmin(userDAO.findOne(UserController.getUserID()).getAdmin());
+            }
             userDAO.save(user);
         }
         return(loadIndexPage(user.getId(), "/admin/userUpdate", model));

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:fragment="head">
+    <meta charset="UTF-8"/>
+    <title th:text="${title}">TheFamilyConnection</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/w3.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+<navHeader th:fragment="navHeader">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
+
+        <h3 th:if="${userName}" th:text="'User: ' + ${userName}"></h3>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <ul class="navbar-nav mr-4" th:if="${user}">
+                <li class="nav-item" th:if="${user.admin} > 5">
+                    <a href="/admin"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">My Admin</button></a>
+                </li>
+                <li class="nav-item">
+                    <a href="/user"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">My Profile</button></a>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large w3-button-disable">Events</button>
+                </li>
+                <li class="nav-item">
+                    <a href="/logout"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large w3-button-disable">Logout</button></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+</navHeader>
+
+<div th:fragment="pBlock">
+    <form method="post" th:object="${user}">
+        <ul th:if="${#fields.hasErrors('*')}">
+            <li th:each="err : ${#fields.errors('*')}" th:text="'Debug Info: ' + ${err}">Input is incorrect</li>
+        </ul>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8"><hr/></div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-3">(Birth Name)</div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label th:for="bFName">First Name*</label><br/>
+                <input type="text" th:field="*{bFName}" class="form-control"/>
+                <span th:errors="*{bFName}" class="errorMsg"></span>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="bMName">Middle Name</label><br/>
+                <input type="text" th:field="*{bMName}" class="form-control"/>
+                <span th:errors="*{bMName}" class="errorMsg"></span>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="bLName">Last Name*</label><br/>
+                <input type="text" th:field="*{bLName}" class="form-control"/>
+                <span th:errors="*{bLName}" class="errorMsg"></span>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="bSuffix">Suffix</label><br/>
+                <input type="text" th:field="*{bSuffix}" class="form-control"/>
+                <span th:errors="*{bSuffix}" class="errorMsg"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8"><hr/></div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-2">(Current Name)</div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label th:for="cFName">First Name</label><br/>
+                <input type="text" th:field="*{cFName}" class="form-control"/>
+                <span th:errors="*{cFName}" class="errorMsg"></span>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="cMName">Middle Name</label><br/>
+                <input type="text" th:field="*{cMName}" class="form-control"/>
+                <span th:errors="*{cMName}" class="errorMsg"></span>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="cLName">Last Name</label><br/>
+                <input type="text" th:field="*{cLName}" class="form-control"/>
+                <span th:errors="*{cLName}" class="errorMsg"></span>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="cSuffix">Suffix</label><br/>
+                <input type="text" th:field="*{cSuffix}" class="form-control"/>
+                <span th:errors="*{cSuffix}" class="errorMsg"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8"><hr/></div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label th:for="dob">Date of birth</label><br/>
+                <input type="date" th:field="*{dob}" class="form-control"/>
+                <span th:errors="*{dob}" class="errorMsg"></span>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="pob">Place of birth</label><br/>
+                <input type="text" th:field="*{pob}" class="form-control"/>
+                <span th:errors="*{pob}" class="errorMsg"></span>
+            </div>
+            <!-- todo: show the dod only if admin -->
+            <div th:if="${admin}">
+                <div class="form-group col-2">
+                    <label th:disabled="diabled" th:for="dod">Date of death</label><br/>
+                    <input type="date" th:field="*{dod}" class="form-control" disabled="disabled" />
+                    <span th:errors="*{dod}" class="errorMsg"></span>
+                </div>
+                <!-- todo: javascript to respond to deceased checkbox to enable/disable dod box -->
+                <div class="form-group col-2">
+                    <label>Deceased</label><br/>
+                    <input type="checkbox" name="deceased"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label for="mother">Mother</label><br/>
+                <select name="mother" id="mother" class="form-control">
+                    <option value="-1">Select</option>
+                    <option value="0"></option>
+                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
+                            th:selected="${motherID} == ${eachUser.key}"></option>
+                </select>
+            </div>
+            <div class="form-group col-2">
+                <label for="father">Father</label><br/>
+                <select name="father" id="father" class="form-control">
+                    <option value="-1">Select</option>
+                    <option value="0"></option>
+                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
+                            th:selected="${fatherID} == ${eachUser.key}"></option>
+                </select>
+            </div>
+            <div class="form-group col-2">
+                <label for="spouse">Spouse</label><br/>
+                <select name="spouse" id="spouse" class="form-control">
+                    <option value="-1">Select</option>
+                    <option value="0"></option>
+                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
+                            th:selected="${spouseID} == ${eachUser.key}"></option>
+                </select>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="anniversary">Anniversary</label><br/>
+                <input type="date" th:field="*{anniversary}" class="form-control"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label th:for="address">Address</label><br/>
+                <input type="text" th:field="*{address}" class="form-control"/>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="city">City</label><br/>
+                <input type="text" th:field="*{city}" class="form-control"/>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="state">State</label><br/>
+                <input type="text" th:field="*{state}" class="form-control"/>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="zip">Zip</label><br/>
+                <input type="text" th:field="*{zip}" class="form-control"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="form-group col-2">
+                <label th:for="primaryEmail">Email</label><br/>
+                <input type="text" th:field="*{primaryEmail}" class="form-control"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5"></div>
+            <div class="col-1 right">
+                <button type="submit" class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">Update</button>
+            </div>
+            <div class="col-1">
+                <a href="/user"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">Cancel</button></a>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-2">* required</div>
+    </div>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+</div>
+
+
+
+<footer class="theam-bg-color" th:fragment="footer">© 2019 TheFamilyConnection.org </footer>
+</body>
+</html>
