@@ -41,6 +41,9 @@ public class User {
 
     private String cSuffix;
 
+    @Column(columnDefinition = "int default 0") // 0 = other/unknown 1=F 2=M
+    private Integer gender;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
 
@@ -163,6 +166,9 @@ public class User {
     public String getFName(){
         String retValue = "";
         if (isNullOrEmpty(cFName) || isNullOrEmpty(cLName)) {
+            if (isNullOrEmpty(bFName)) {
+                return "";
+            }
             return (bFName);
         }
         return (cFName);
@@ -171,6 +177,9 @@ public class User {
     public String getMName() {
         String retValue = "";
         if (isNullOrEmpty(cFName) || isNullOrEmpty(cLName)) {
+            if (isNullOrEmpty(bMName)) {
+                return "";
+            }
             return (bMName);
         }
         return (cMName);
@@ -179,6 +188,9 @@ public class User {
     public String getLName() {
         String retValue = "";
         if (isNullOrEmpty(cFName) || isNullOrEmpty(cLName)) {
+            if (isNullOrEmpty(bLName)) {
+                return "";
+            }
             return (bLName);
         }
         return (cLName);
@@ -187,6 +199,9 @@ public class User {
     public String getSuffix() {
         String retValue = "";
         if (isNullOrEmpty(cFName) || isNullOrEmpty(cLName)) {
+            if (isNullOrEmpty(bSuffix)) {
+                return "";
+            }
             return (bSuffix);
         }
         return (cSuffix);
@@ -385,5 +400,13 @@ public class User {
 
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
     }
 }

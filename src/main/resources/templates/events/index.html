@@ -15,34 +15,45 @@
             <h1 class="center">Kalaher Family Birthdays and Anniversaries</h1><br/>
             <div class="container-fluid border theme-bg-color">
                 <div class="row"><div class="col-12"> <br/> </div></div>
-                <div class="row">
-                    <div class="col-12 monthName" th:text="${thisMonth} + ' Birthdays'"></div>
-                </div>
-                <div class="row"  th:each="eachUser: ${allUsers}">
-                    <div class="col-2"></div>
-<!--                    <div class="col-8">
-                        <h3 th:text="${eachUser.getBirthDay()} + ' ' + ${eachUser.getFullName()}"></h3>
-                    </div> -->
-                    <div class="col-2">
-                        <h3 th:text="${eachUser.getBirthDay()}"></h3>
+                <span th:unless="${allUsers} and ${allUsers.size()}">
+                    <div class="row">
+                        <div class="col-12 monthName" th:text="'No ' + ${thisMonth} + ' Anniversaries'"></div>
                     </div>
-                    <div class="col-6">
-                        <h3 th:text="${eachUser.getFullName()}"></h3>
+                </span>
+                <span th:if="${allUsers} and ${allUsers.size()}">
+                    <div class="row">
+                        <div class="col-12 monthName" th:text="${thisMonth} + ' Birthdays'"></div>
                     </div>
-                </div>
+                    <div class="row"  th:each="eachUser: ${allUsers}">
+                        <div class="col-2"></div>
+                        <div class="col-2">
+                            <h3 th:text="${eachUser.getBirthDay()}"></h3>
+                        </div>
+                        <div class="col-6">
+                            <h3 th:text="${eachUser.getFullName()}"></h3>
+                        </div>
+                    </div>
+                </span>
                 <div class="row"><div class="col-12"> <br/> </div></div>
-                <div class="row">
-                    <div class="col-12 monthName" th:text="${thisMonth} + ' Anniversaries'"></div>
-                </div>
-                <div class="row" th:each="eachUser: ${anniversaries}">
-                    <div class="col-2"></div>
-                    <div class="col-2">
-                        <h3 th:text="${eachUser.getAnniversaryDay()}"></h3>
+                <span th:unless="${anniversaries} and ${anniversaries.size()}">
+                    <div class="row">
+                        <div class="col-12 monthName" th:text="'No ' + ${thisMonth} + ' Anniversaries'"></div>
                     </div>
-                    <div class="col-6">
-                        <h3 th:text="${eachUser.getFullName()}"></h3>
+                </span>
+                <span th:if="${anniversaries} and ${anniversaries.size()}">
+                    <div class="row">
+                        <div class="col-12 monthName" th:text="${thisMonth} + ' Anniversaries'"></div>
                     </div>
-                </div>
+                    <div class="row" th:each="eachUser: ${anniversaries}">
+                        <div class="col-2"></div>
+                        <div class="col-2">
+                            <h3 th:text="${eachUser.getAnniversaryDay()}"></h3>
+                        </div>
+                        <div class="col-6">
+                            <h3 th:text="${eachUser.getFullName()}"></h3>
+                        </div>
+                    </div>
+                </span>
                 <div class="row"><div class="col-12"> <br/> </div></div>
                 <div class="row">
                     <div class="col-4 right">

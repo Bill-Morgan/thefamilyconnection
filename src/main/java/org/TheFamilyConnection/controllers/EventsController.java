@@ -60,26 +60,26 @@ public class EventsController {
 
     @RequestMapping(value="")
     public String index(){
-        if (!UtilitiesController.isLoggedIn()) {
-            return ("redirect:/login");
-        }
+//        if (!UtilitiesController.isLoggedIn()) {
+  //          return ("redirect:/login");
+    //    }
         return "redirect:/events/calendar";
     }
 
     @RequestMapping(value="calendar", method = RequestMethod.GET)
     public String displayCalendarDefault(Model model) {
-        if (!UtilitiesController.isLoggedIn()) {
-            return ("redirect:/login");
-        }
+//        if (!UtilitiesController.isLoggedIn()) {
+  //          return ("redirect:/login");
+    //    }
         return buildEventsPageModel(model, getCurrentMonthInt() + 1);
     }
 
     @RequestMapping(value="calendar/{theMonth}", method = RequestMethod.GET)
     public String displayCalendarMonth(@PathVariable String theMonth,
                         Model model){
-        if (!UtilitiesController.isLoggedIn()) {
-            return ("redirect:/login");
-        }
+//        if (!UtilitiesController.isLoggedIn()) {
+  //          return ("redirect:/login");
+    //    }
         Integer theMonthInt;
         try {
             theMonthInt = Integer.valueOf(theMonth);
@@ -101,9 +101,11 @@ public class EventsController {
                                             "May", "June", "July", "August", "September", "October",
                                             "November", "December", "January");
         User adminUser = userDAO.findOne(UserController.getUserID());
-        model.addAttribute("adminLevel", adminUser.getAdmin());
-        model.addAttribute("userName", adminUser.getFullName());
-        model.addAttribute("adminID", adminUser.getId());
+        if (adminUser != null) {
+            model.addAttribute("adminLevel", adminUser.getAdmin());
+            model.addAttribute("userName", adminUser.getFullName());
+            model.addAttribute("adminID", adminUser.getId());
+        }
         model.addAttribute("theMonths", theMonths);
         model.addAttribute("lastMonth", theMonths.get(theMonthInt - 1));
         model.addAttribute("thisMonth", theMonths.get(theMonthInt));

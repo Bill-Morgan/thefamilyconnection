@@ -10,7 +10,7 @@
 <div class="container-fluid border theme-bg-color delayedDiv" id="delayedDiv">
     <div th:if="${alertMsg}" class="row">
         <div class="col-4"></div>
-        <div class="col-4 error center" th:text="${alertMsg}"></div>
+        <div class="col-4 errorMsg center" th:text="${alertMsg}"></div>
     </div>
     <div th:unless="${formAction} == '/admin/addUser'"  class="row">
         <div class="col-4"></div>

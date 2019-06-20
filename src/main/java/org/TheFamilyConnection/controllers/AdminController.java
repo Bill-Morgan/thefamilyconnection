@@ -110,9 +110,12 @@ public class AdminController {
             user.setSpouse(userDAO.findOne(spouse));
             user.setActive(Boolean.TRUE);
             userDAO.save(user);
+            model.addAttribute("alertMsg", "New User Saved");
+            return(loadIndexPage(user.getId(), "", model));
+
         }
-        model.addAttribute("alertMsg", "New User Saved");
-        return(loadIndexPage(user.getId(), "", model));
+        model.addAttribute("alertMsg", "Save failed.  Please correct errors.");
+        return (loadIndexPage(0, "/admin/addUser", model));
     }
 
     private String loadIndexPage(Integer userID, String formAction, Model model) {

@@ -55,10 +55,22 @@
     <!-- navbar -->
     <nav th:unless="${userName}" class="navbar navbar-expand-lg fixed-top">
         <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <ul class="navbar-nav mr-4">
+                <li class="nav-item">
+                    <a href="/events"><button class="nav-link btn btn-primary btn-lg">Events</button></a>
+                </li>
+                <li class="nav-item">
+                    <a href="/login"><button class="nav-link btn btn-primary btn-lg">Login</button></a>
+                </li>
+            </ul>
+        </div>
     </nav>
     <nav th:if="${userName}" class="navbar navbar-expand-lg fixed-top">
         <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
-
         <h3 th:text="'User: ' + ${userName}"></h3>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -67,7 +79,6 @@
             <ul class="navbar-nav mr-4">
                 <li class="nav-item" th:if="${adminLevel} >= 5">
                     <a href="/admin"><button class="nav-link btn btn-primary btn-lg">Family Admin</button></a>
-<!--                    <a href="/admin"><button class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">My Admin</button></a> -->
                 </li>
                 <li class="nav-item">
                     <a href="/user"><button class="nav-link btn btn-primary btn-lg">My Profile</button></a>
@@ -243,6 +254,14 @@
             <div class="form-group col-2">
                 <label th:for="primaryEmail">Email</label><br/>
                 <input type="email" th:field="*{primaryEmail}" class="form-control"/>
+            </div>
+            <div class="form-group col-2">
+                <label th:for="gender">Gender</label><br/>
+                <select name="gender" id="gender" class="form-control">
+                    <option value="0" th:selected="*{gender} == 0 ? 'selected'">Other/Unknown</option>
+                    <option value="1" th:selected="*{gender} == 1 ? 'selected'">Female</option>
+                    <option value="2" th:selected="*{gender} == 2 ? 'selected'">Male</option>
+                </select>
             </div>
             <div th:if="${adminID} and ${adminLevel} >= 5 and ${adminID} != *{id}" class="form-group col-2">
                 <label for="invite">Send Email Invitation</label><br/>
