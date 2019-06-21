@@ -5,78 +5,81 @@
     <title th:text="${title}">Title</title>
 </head>
 <body>
-<navHeader th:replace="fragments  :: navHeader"></navHeader>
-</body>
-<div class="container-fluid border theme-bg-color delayedDiv" id="delayedDiv">
-    <br/><br/>
-    <div class="row theme-bg-color">
-        <div class="col-3"></div>
-        <div class="col-6">
-            <h1 class="center">Kalaher Family Birthdays and Anniversaries</h1><br/>
-            <div class="container-fluid border theme-bg-color">
-                <div class="row"><div class="col-12"> <br/> </div></div>
-                <span th:unless="${allUsers} and ${allUsers.size()}">
-                    <div class="row">
-                        <div class="col-12 monthName" th:text="'No ' + ${thisMonth} + ' Anniversaries'"></div>
-                    </div>
-                </span>
-                <span th:if="${allUsers} and ${allUsers.size()}">
-                    <div class="row">
-                        <div class="col-12 monthName" th:text="${thisMonth} + ' Birthdays'"></div>
-                    </div>
-                    <div class="row"  th:each="eachUser: ${allUsers}">
-                        <div class="col-2"></div>
-                        <div class="col-2">
-                            <h3 th:text="${eachUser.getBirthDay()}"></h3>
+    <navHeader th:replace="fragments  :: navHeader"></navHeader>
+    <div class="container-fluid border theme-bg-color delayedDiv" id="delayedDiv">
+        <br/><br/>
+        <div class="row theme-bg-color">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <h3 class="center">Kalaher Family Birthdays and Anniversaries</h3><br/>
+                <div class="container-fluid border theme-bg-color">
+                    <div class="row"><div class="col-12"> <br/> </div></div>
+                    <span th:unless="${allUsers} and ${allUsers.size()}">
+                        <div class="row">
+                            <div class="col-12 monthName" th:text="'No ' + ${thisMonth} + ' Anniversaries'"></div>
                         </div>
-                        <div class="col-6">
-                            <h3 th:text="${eachUser.getFullName()}"></h3>
+                    </span>
+                    <span th:if="${allUsers} and ${allUsers.size()}">
+                        <div class="row">
+                            <div class="col-12 monthName" th:text="${thisMonth} + ' Birthdays'"></div>
                         </div>
-                    </div>
-                </span>
-                <div class="row"><div class="col-12"> <br/> </div></div>
-                <span th:unless="${anniversaries} and ${anniversaries.size()}">
+                        <div class="row"><div class="col-12"> <br/> </div></div>
+                        <div class="row"  th:each="eachUser: ${allUsers}">
+                            <div class="col-2"></div>
+                            <div class="col-2">
+                                <div class="events" th:text="${eachUser.getBirthDay()}"></div>
+                            </div>
+                            <div class="col-6">
+                                <a th:if="${adminID} and ${adminLevel} >= 5" class="events"  th:href="'/admin/edit/' + ${eachUser.id}" th:text="${eachUser.getFullName()}"></a>
+                                <div th:unless="${adminID} and ${adminLevel} >= 5" class="events" th:text="${eachUser.getFullName()}"></div>
+                            </div>
+                        </div>
+                    </span>
+                    <div class="row"><div class="col-12"> <br/> </div></div>
+                    <span th:unless="${anniversaries} and ${anniversaries.size()}">
+                        <div class="row">
+                            <div class="col-12 monthName" th:text="'No ' + ${thisMonth} + ' Anniversaries'"></div>
+                        </div>
+                    </span>
+                    <span th:if="${anniversaries} and ${anniversaries.size()}">
+                        <div class="row">
+                            <div class="col-12 monthName" th:text="${thisMonth} + ' Anniversaries'"></div>
+                        </div>
+                        <div class="row"><div class="col-12"> <br/> </div></div>
+                        <div class="row" th:each="anniversary: ${anniversaries}">
+                            <div class="col-2"></div>
+                            <div class="col-2">
+                                <div class="events" th:text="${anniversary.date}"></div>
+                            </div>
+                            <div class="col-6">
+                                <div class="events"  th:text="${anniversary.names}"></div>
+                            </div>
+                        </div>
+                    </span>
+                    <div class="row"><div class="col-12"> <br/> </div></div>
                     <div class="row">
-                        <div class="col-12 monthName" th:text="'No ' + ${thisMonth} + ' Anniversaries'"></div>
-                    </div>
-                </span>
-                <span th:if="${anniversaries} and ${anniversaries.size()}">
-                    <div class="row">
-                        <div class="col-12 monthName" th:text="${thisMonth} + ' Anniversaries'"></div>
-                    </div>
-                    <div class="row" th:each="eachUser: ${anniversaries}">
-                        <div class="col-2"></div>
-                        <div class="col-2">
-                            <h3 th:text="${eachUser.getAnniversaryDay()}"></h3>
+                        <div class="col-4 right">
+                            <a th:href="'/events/calendar/' + ${theMonthInt - 1}"><button type="button" th:text="${lastMonth} + ' &lt;'" class="btn btn-primary btn-md">LastMonth</button></a>
                         </div>
-                        <div class="col-6">
-                            <h3 th:text="${eachUser.getFullName()}"></h3>
+                        <div class="col-4">
+                            <select name="pickMonth" onchange="loadNewMonth()" id="pickMonth" class="form-control  btn-primary btn-md">
+                                <!--<option value="-1">See All</option> todo: make a view all option -->
+                                <option th:each="eachMonth, iter: ${theMonths}" th:if="${iter.index} != 0 and ${iter.index} != 13" th:value="${iter.index}" th:text="${eachMonth}"
+                                        th:selected="${iter.index} == ${theMonthInt}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <a th:href="'/events/calendar/' + ${theMonthInt + 1}"><button type="button" th:text="'&gt; ' + ${nextMonth}" class="btn btn-primary btn-md">NextMonth</button></a>
                         </div>
                     </div>
-                </span>
-                <div class="row"><div class="col-12"> <br/> </div></div>
-                <div class="row">
-                    <div class="col-4 right">
-                        <a th:href="'/events/calendar/' + ${theMonthInt - 1}"><button type="button" th:text="${lastMonth} + ' &lt;'" class="btn btn-primary btn-lg">LastMonth</button></a>
-                    </div>
-                    <div class="col-4">
-                        <select name="pickMonth" onchange="loadNewMonth()" id="pickMonth" class="form-control  btn-primary btn-lg">
-                            <!--<option value="-1">See All</option> todo: make a view all option -->
-                            <option th:each="eachMonth, iter: ${theMonths}" th:if="${iter.index} != 0 and ${iter.index} != 13" th:value="${iter.index}" th:text="${eachMonth}"
-                                    th:selected="${iter.index} == ${theMonthInt}">
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col-4">
-                        <a th:href="'/events/calendar/' + ${theMonthInt + 1}"><button type="button" th:text="'&gt; ' + ${nextMonth}" class="btn btn-primary btn-lg">NextMonth</button></a>
-                    </div>
+                    <div class="row"><div class="col-12"> <br/> </div></div>
                 </div>
-                <div class="row"><div class="col-12"> <br/> </div></div>
             </div>
         </div>
+        <div class="row"><div class="col-12"> <br/> </div></div>
+        <div class="row"><div class="col-12"> <br/> </div></div>
     </div>
-    <div class="row"><div class="col-12"> <br/> </div></div>
-    <div class="row"><div class="col-12"> <br/> </div></div>
-</div>
-<footer th:replace="fragments :: footer"></footer>
+    <footer th:replace="fragments :: footer"></footer>
+</body>
 </html>

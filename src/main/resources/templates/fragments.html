@@ -55,40 +55,40 @@
     <!-- navbar -->
     <nav th:unless="${userName}" class="navbar navbar-expand-lg fixed-top">
         <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
-        <h3>User: Guest</h3>
+        <div class="large">User: Guest</div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav mr-4">
                 <li class="nav-item">
-                    <a href="/events"><button class="nav-link btn btn-primary btn-lg">Events</button></a>
+                    <a href="/events"><button class="nav-link btn btn-primary btn-md">Events</button></a>
                 </li>
                 <li class="nav-item">
-                    <a href="/login"><button class="nav-link btn btn-primary btn-lg">Login</button></a>
+                    <a href="/login"><button class="nav-link btn btn-primary btn-md">Login</button></a>
                 </li>
             </ul>
         </div>
     </nav>
     <nav th:if="${userName}" class="navbar navbar-expand-lg fixed-top">
         <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
-        <h3 th:text="'User: ' + ${userName}"></h3>
+        <div class="large" th:text="'User: ' + ${userName}"></div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav mr-4">
                 <li class="nav-item" th:if="${adminLevel} >= 5">
-                    <a href="/admin"><button class="nav-link btn btn-primary btn-lg">Family Admin</button></a>
+                    <a href="/admin"><button class="nav-link btn btn-primary btn-md">Family Admin</button></a>
                 </li>
                 <li class="nav-item">
-                    <a href="/user"><button class="nav-link btn btn-primary btn-lg">My Profile</button></a>
+                    <a href="/user"><button class="nav-link btn btn-primary btn-md">My Profile</button></a>
                 </li>
                 <li class="nav-item">
-                    <a href="/events"><button class="nav-link btn btn-primary btn-lg">My Events</button></a>
+                    <a href="/events"><button class="nav-link btn btn-primary btn-md">My Events</button></a>
                 </li>
                 <li class="nav-item">
-                    <a href="/logout"><button class="nav-link btn btn-primary btn-lg">Logout</button></a>
+                    <a href="/logout"><button class="nav-link btn btn-primary btn-md">Logout</button></a>
                 </li>
             </ul>
         </div>
@@ -290,12 +290,12 @@
         <div class="row" th:if="${adminLevel} > 2">
             <div class="col-3"></div>
             <div class="col-6 center">
-                <button th:if="${formAction} == '/admin/addUser'" type="submit" class="btn btn-primary btn-lg">Add User</button>
-                <button th:unless="${formAction} == '/admin/addUser'" type="submit" class="btn btn-primary btn-lg">Update</button>
-                <a href="/user"><button type="button" class="btn btn-primary btn-lg">Cancel</button></a>
+                <button th:if="${formAction} == '/admin/addUser'" type="submit" class="btn btn-primary btn-md">Add User</button>
+                <button th:unless="${formAction} == '/admin/addUser'" type="submit" class="btn btn-primary btn-md">Update</button>
+                <a href="/user"><button type="button" class="btn btn-primary btn-md">Cancel</button></a>
                 <span th:if="${adminID} and ${adminLevel} > 5 and ${adminID} != *{id} and ${formAction} != '/admin/addUser'">
-                    <button type="button" class="btn btn-danger btn-lg" onclick="revokeAccesss()">Revoke Access</button>
-                    <a href="#"><button type="button" class="btn btn-danger btn-lg" onclick="confirmDelete()">Delete User</button></a>
+                    <button type="button" class="btn btn-danger btn-md" onclick="revokeAccesss()">Revoke Access</button>
+                    <a href="#"><button type="button" class="btn btn-danger btn-md" onclick="confirmDelete()">Delete User</button></a>
                 </span>
             </div>
         </div>

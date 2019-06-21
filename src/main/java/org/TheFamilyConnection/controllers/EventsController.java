@@ -3,6 +3,8 @@ package org.TheFamilyConnection.controllers;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 import org.TheFamilyConnection.comparators.AnniversaryComparator;
 import org.TheFamilyConnection.comparators.BirthdayComparator;
+import org.TheFamilyConnection.comparators.GenderComparator;
+import org.TheFamilyConnection.models.Anniversary;
 import org.TheFamilyConnection.models.User;
 import org.TheFamilyConnection.models.data.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +51,18 @@ public class EventsController {
                 filteredUsers.add(eachUser);
             }
         }
-        allUsers.sort(comparatorAnn);
         return filteredUsers;
+    }
+
+    private List<Anniversary> getAnniversaries(Integer month){
+        List<Anniversary> anniversaries = new ArrayList<>();
+        List<User> allUsers = getAllWSpouse(month);
+        for (int i = 0; i < allUsers.size(); i++) {
+            anniversaries.add(new Anniversary(allUsers.get(i)));
+            allUsers.remove(allUsers.get(i).getSpouse());
+        }
+        anniversaries.sort(comparatorAnn);
+        return anniversaries;
     }
 
     private Integer getCurrentMonthInt(){
@@ -60,26 +72,17 @@ public class EventsController {
 
     @RequestMapping(value="")
     public String index(){
-//        if (!UtilitiesController.isLoggedIn()) {
-  //          return ("redirect:/login");
-    //    }
         return "redirect:/events/calendar";
     }
 
     @RequestMapping(value="calendar", method = RequestMethod.GET)
     public String displayCalendarDefault(Model model) {
-//        if (!UtilitiesController.isLoggedIn()) {
-  //          return ("redirect:/login");
-    //    }
         return buildEventsPageModel(model, getCurrentMonthInt() + 1);
     }
 
     @RequestMapping(value="calendar/{theMonth}", method = RequestMethod.GET)
     public String displayCalendarMonth(@PathVariable String theMonth,
                         Model model){
-//        if (!UtilitiesController.isLoggedIn()) {
-  //          return ("redirect:/login");
-    //    }
         Integer theMonthInt;
         try {
             theMonthInt = Integer.valueOf(theMonth);
@@ -110,7 +113,7 @@ public class EventsController {
         model.addAttribute("lastMonth", theMonths.get(theMonthInt - 1));
         model.addAttribute("thisMonth", theMonths.get(theMonthInt));
         model.addAttribute("nextMonth", theMonths.get(theMonthInt + 1));
-        model.addAttribute("anniversaries", getAllWSpouse(theMonthInt));
+        model.addAttribute("anniversaries", getAnniversaries(theMonthInt));
         model.addAttribute("theMonthInt", theMonthInt);
         model.addAttribute("allUsers", getAllUsers(theMonthInt));
         return "events/index";

@@ -12,9 +12,17 @@
     background-color: white
 }
 
+.large {
+    font-size: large;
+}
+
 .monthName {
-    font-size: xx-large;
+    font-size: x-large;
     text-align: center;
+}
+
+.events {
+    font-size: large;
 }
 
 alert {
@@ -48,6 +56,15 @@ input[type="text"][disabled] {
     align-content: right;
 }
 
+a:link {
+    color: white !important;
+}
+a:visited {
+    color: white !important;
+}
+a:hover {
+    color: lightblue !important;
+}
 hr {
     border: 3px solid darkgreen !important;
     border-radius: 2px !important;
@@ -64,6 +81,7 @@ hr.wide {
 }
 
 .btn-primary {
+    font-size: small; !important;
     background-color: white !important;
     border-radius: 15px !important;
     color: black !important;

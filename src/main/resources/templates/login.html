@@ -4,32 +4,34 @@
     <meta charset="UTF-8" />
     <title th:text="${title}">Title</title>
 </head>
-<body class="theme-bg-color">
-<navHeader th:replace="fragments  :: navHeader"></navHeader>
-<div class="center"><h1 th:text="${action}"></h1></div><br/><br/>
-<p class="errorMsg center" th:if="${errorMsg}" th:text="${errorMsg}"></p>
-<div class="container">
-    <div class="row">
-        <div class="col-4"></div>
-        <div class="col-4">
-            <form method="post">
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input class="form-control" type="text" name="username" />
+<body>
+    <navHeader th:replace="fragments  :: navHeader"></navHeader>
+    <div class="theme-bg-color">
+        <div class="center"><h1 th:text="${action}"></h1></div><br/><br/>
+        <p class="errorMsg center" th:if="${errorMsg}" th:text="${errorMsg}"></p>
+        <div class="container theme-bg-color">
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                    <form method="post">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input class="form-control" type="text" name="username" />
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input class="form-control" type="password" name="password" />
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" /> Remember me</label>
+                        </div>
+                        <button type="submit" class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">Login</button>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input class="form-control" type="password" name="password" />
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox" /> Remember me</label>
-                </div>
-                <button type="submit" class="nav-link w3-button w3-white w3-border w3-border-blue w3-round-large">Login</button>
-            </form>
+            </div>
         </div>
+        <br/><br/><br/>
     </div>
-</div>
-<br/><br/><br/>
-<footer th:replace="fragments :: footer"></footer>
+    <footer th:replace="fragments :: footer"></footer>
 </body>
 </html>

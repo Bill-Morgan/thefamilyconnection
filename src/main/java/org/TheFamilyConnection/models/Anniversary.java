@@ -1,37 +1,47 @@
 package org.TheFamilyConnection.models;
 
+import java.util.ArrayList;
 import java.util.Date;
-import org.TheFamilyConnection.models.User;
+import java.util.List;
+
+import org.TheFamilyConnection.comparators.GenderComparator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class Anniversary {
 
-    Date date;
+    String date;
 
     String names;
 
-    User user1;
-
-    User user2;
+    private static GenderComparator comparatorGender = new GenderComparator();
 
     public Anniversary() {
     }
 
     public Anniversary(User user) {
-        this.user1 = user;
-        this.user2 = user.getSpouse();
-        this.date = user.getAnniversary();
+        this.date = user.getAnniversaryDay();
         this.names = buildName(user);
     }
 
     private static String buildName(User user){
-        return "";
+        String retValue;
+        List<User> couple = new ArrayList<>();
+        couple.add(user);
+        couple.add(user.getSpouse());
+        couple.sort(comparatorGender.reversed());
+        if (couple.get(0).getLName().equals(couple.get(1).getLName())) {
+            retValue = couple.get(0).getFName() + " & " + couple.get(1).getFName() + " " + couple.get(1).getLName();
+        } else {
+            retValue= couple.get(0).getFName() + " " + couple.get(0).getLName() + " & " + couple.get(1).getFName() + " " + couple.get(1).getLName();
+        }
+        return retValue;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -41,9 +51,5 @@ public class Anniversary {
 
     public void setNames(String names) {
         this.names = names;
-    }
-
-    public void setNames(String n1, String n2){
-        this.names = n1 + " " + n2;
     }
 }

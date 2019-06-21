@@ -29,6 +29,27 @@ public class AdminController {
         return allUsers;
     }
 
+    private void setUserSpouse(User user){
+        List<User> userXSpouse = userDAO.findBySpouse(user);
+        for (User eachXSpouse : userXSpouse) {
+            eachXSpouse.setSpouse(null);
+            eachXSpouse.setAnniversary(null);
+            userDAO.save(eachXSpouse);
+        }
+        User userSpouse = user.getSpouse();
+        if (userSpouse != null) {
+            if (userSpouse.getSpouse() != null) {
+                User userSpouseXSpouse = userSpouse.getSpouse();
+                userSpouseXSpouse.setAnniversary(null);
+                userSpouseXSpouse.setSpouse(null);
+                userDAO.save(userSpouseXSpouse);
+            }
+            userSpouse.setSpouse(user);
+            userSpouse.setAnniversary(user.getAnniversary());
+            userDAO.save(userSpouse);
+        }
+    }
+
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String adminSelectUser(Model model) {
         return (loadIndexPage(UserController.getUserID(), "/admin/userUpdate", model));
@@ -39,7 +60,12 @@ public class AdminController {
         return (loadIndexPage(editUser, "/admin/userUpdate", model));
     }
 
-    @RequestMapping(value="deleteUser/{userID}", method = RequestMethod.GET)
+    @RequestMapping(value = "edit/{userID}", method = RequestMethod.GET)
+    public String displayEditUser(@PathVariable Integer userID, Model model) {
+        return (loadIndexPage(userID, "/admin/userUpdate", model));
+    }
+
+    @RequestMapping(value = "deleteUser/{userID}", method = RequestMethod.GET)
     public String processDeleteUser(@PathVariable Integer userID, Model model) {
         if (!UtilitiesController.isLoggedIn()) {
             return ("redirect:/login");
@@ -86,6 +112,7 @@ public class AdminController {
                 user.setAdmin(userDAO.findOne(UserController.getUserID()).getAdmin());
             }
             userDAO.save(user);
+            setUserSpouse(user);
         }
         return(loadIndexPage(user.getId(), "/admin/userUpdate", model));
     }
@@ -110,6 +137,7 @@ public class AdminController {
             user.setSpouse(userDAO.findOne(spouse));
             user.setActive(Boolean.TRUE);
             userDAO.save(user);
+            setUserSpouse(user);
             model.addAttribute("alertMsg", "New User Saved");
             return(loadIndexPage(user.getId(), "", model));
 
