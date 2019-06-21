@@ -8,8 +8,9 @@
 }
 
 .errorMsg {
-    color: red;
-    background-color: white
+    font-size: large;
+    color: white;
+    background-color: red;
 }
 
 .large {

@@ -8,6 +8,7 @@
 <navHeader th:replace="fragments  :: navHeader"></navHeader>
 <h1 th:if="${errors}" class="error center" th:text="'Has Errors'"></h1>
 <div class="container-fluid border theme-bg-color delayedDiv" id="delayedDiv">
+    <br />
     <div th:if="${alertMsg}" class="row">
         <div class="col-4"></div>
         <div class="col-4 errorMsg center" th:text="${alertMsg}"></div>
