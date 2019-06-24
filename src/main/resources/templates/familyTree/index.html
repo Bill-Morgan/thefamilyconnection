@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8" />
+    <title th:text="${title}">Title</title>
+</head>
+<body>
+<navHeader th:replace="fragments  :: navHeader"></navHeader>
+<div class="container-fluid border theme-bg-color delayedDiv" id="delayedDiv">
+    <div class="row"><div class="col-12">&nbsp;</div></div>
+    <div class="row"><div class="col-2"></div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-2 border rounded">
+                    <div class="row"><div class="col-12">&nbsp;</div></div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <a th:if="${user.mother}" th:href="'/familytree/' + ${user.motherId}" th:text="${user.mother.getFullName()}">Mother</a>
+                        </div>
+                    </div>
+                    <div class="row"><div class="col-12">&nbsp;</div></div>
+                </div>
+                <div class="col-2"></div>
+                <div class="col-2 border rounded">
+                    <div class="row"><div class="col-12">&nbsp;</div></div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <a th:if="${user.father}" th:href="'/familytree/' + ${user.fatherId}" th:text="${user.father.getFullName()}">Father</a>
+                        </div>
+                    </div>
+                    <div class="row"><div class="col-12">&nbsp;</div> </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4 border border-top-0 border-success">&nbsp;<br/><br/></div>
+            </div>
+            <div class="row">
+                <div class="col-6 border border-top-0 border-bottom-0 border-left-0 border-success">&nbsp;<br/><br/></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-5"></div>
+        <div class="col-2 border rounded">
+            <div class="row"><div class="col-12">&nbsp;</div></div>
+            <div class="row">
+                <div class="col-12 text-center" th:text="${user.getFullName()}">User</div>
+            </div>
+            <div class="row"><div class="col-12">&nbsp;</div> </div>
+        </div>
+        <div class="col-1">
+            <div class="row">
+                <div class="col-12 border border-top-0 border-right-0 border-left-0 border-success"><br/><br/></div>
+            </div>
+        </div>
+        <div class="col-2 border rounded">
+            <div class="row"><div class="col-12">&nbsp;</div></div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <a th:if="${user.spouse}" th:href="'/familytree/' + ${user.spouseId}" th:text="${user.spouse.getFullName()}">Spouse</a>
+                </div>
+            </div>
+            <div class="row"><div class="col-12">&nbsp;</div> </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 border border-top-0 border-bottom-0 border-left-0 border-success"><br/><br/></div>
+    </div>
+    <div class="row">
+        <div class="col-1" th:each="i:${#numbers.sequence(1,5-(#lists.size(theKids)-1)/2)}"></div>
+        <div class="col-1">
+            <div class="row">
+                <div class="col-sm"><br/></div>
+                <div class="col-sm border border-bottom-0 border-right-0 border-success"><br/><br/></div>
+            </div>
+        </div>
+        <div class="col-1" th:each="i:${#numbers.sequence(3,#lists.size(theKids))}">
+            <div class="col-sm border border-bottom-0 border-success">&nbsp;</div>
+            <div class="col-sm border border-bottom-0 border-success">&nbsp;</div>
+        </div>
+        <div class="col-1">
+            <div class="row">
+                <div class="col-sm border">&nbsp;</div>
+                <div class="col-sm"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row" th:if="${theKids.size()} > 0">
+        <div class="col-1" th:each="i:${#numbers.sequence(1,5-(#lists.size(theKids)-1)/2)}"></div>
+        <div class="col-1 border rounded side-buffer" th:each="eachKid: ${theKids}">
+            <a th:href="'/familytree/' + ${eachKid.getId()}" th:text="${eachKid.getFullName()}">A Kid</a>
+        </div>
+    </div>
+    <div class="row"><div class="col-12">&nbsp;</div></div>
+    <div class="row"><div class="col-12">&nbsp;</div></div>
+</div>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>

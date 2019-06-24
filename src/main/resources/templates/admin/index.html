@@ -8,9 +8,11 @@
 <navHeader th:replace="fragments  :: navHeader"></navHeader>
 <h1 th:if="${errors}" class="error center" th:text="'Has Errors'"></h1>
 <div class="container-fluid border theme-bg-color delayedDiv" id="delayedDiv">
+    <!-- todo: put the name of the profile being edited either in the header or on the top line and not scrolling   -->
     <br />
     <div th:if="${alertMsg}" class="row">
         <div class="col-4"></div>
+        <!-- todo: make alert message fade out after about 5 seconds   -->
         <div class="col-4 errorMsg center" th:text="${alertMsg}"></div>
     </div>
     <div th:unless="${formAction} == '/admin/addUser'"  class="row">
@@ -41,8 +43,8 @@
                 <br/>
                 <div class="row">
                     <div class="col-6 center">
-                        <a href="/admin/addUser"><button type="button" class="btn btn-primary btn-lg">Add User</button></a>
-                        <a href="/user"><button type="button" class="btn btn-primary btn-lg">Cancel</button></a>
+                        <a href="/admin/addUser"><button type="button" class="btn btn-primary btn-sm">Add User</button></a>
+                        <a href="/user"><button type="button" class="btn btn-primary btn-sm">Cancel</button></a>
                     </div>
                 </div>
             </form>

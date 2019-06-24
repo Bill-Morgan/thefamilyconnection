@@ -19,8 +19,6 @@ public class AdminController {
     @Autowired
     private UserDAO userDAO;
 
-    private UtilitiesController utilitiesController;
-
     private NameComparator comparator = new NameComparator();
 
     private List<User> buildAllPeopleList() {

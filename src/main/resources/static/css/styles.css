@@ -7,14 +7,37 @@
     color: white;
 }
 
+.side-buffer{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+div.no-gutter {
+    padding-left: 0;
+    padding-right: 0;
+}
 .errorMsg {
     font-size: large;
     color: white;
     background-color: red;
 }
 
+.ltblue {
+    color: blue;
+    background: #00bcd4;
+}
+
+.white-border {
+    border-color: white;
+    border-width: medium;
+}
+
 .large {
     font-size: large;
+}
+
+.centerText {
+    text-align: center;
 }
 
 .monthName {
@@ -47,10 +70,6 @@ input[type="text"][disabled] {
     width: 600px;
 }
 
-.center {
-    text-align: center;
-}
-
 .right {
     text-align: right;
     alignment: right;
@@ -66,7 +85,12 @@ a:visited {
 a:hover {
     color: lightblue !important;
 }
-hr {
+
+hr.vthin {
+    border: 1px solid darkgreen !important;
+}
+
+hr.thin {
     border: 3px solid darkgreen !important;
     border-radius: 2px !important;
 }

@@ -59,10 +59,10 @@
                     <div class="row"><div class="col-12"> <br/> </div></div>
                     <div class="row">
                         <div class="col-4 right">
-                            <a th:href="'/events/calendar/' + ${theMonthInt - 1}"><button type="button" th:text="${lastMonth} + ' &lt;'" class="btn btn-primary btn-md">LastMonth</button></a>
+                            <a th:href="'/events/calendar/' + ${theMonthInt - 1}"><button type="button" th:text="${lastMonth} + ' &lt;'" class="btn btn-primary btn-sm">LastMonth</button></a>
                         </div>
                         <div class="col-4">
-                            <select name="pickMonth" onchange="loadNewMonth()" id="pickMonth" class="form-control  btn-primary btn-md">
+                            <select name="pickMonth" onchange="loadNewMonth()" id="pickMonth" class="form-control  btn-primary btn-sm">
                                 <!--<option value="-1">See All</option> todo: make a view all option -->
                                 <option th:each="eachMonth, iter: ${theMonths}" th:if="${iter.index} != 0 and ${iter.index} != 13" th:value="${iter.index}" th:text="${eachMonth}"
                                         th:selected="${iter.index} == ${theMonthInt}">
@@ -70,7 +70,7 @@
                             </select>
                         </div>
                         <div class="col-4">
-                            <a th:href="'/events/calendar/' + ${theMonthInt + 1}"><button type="button" th:text="'&gt; ' + ${nextMonth}" class="btn btn-primary btn-md">NextMonth</button></a>
+                            <a th:href="'/events/calendar/' + ${theMonthInt + 1}"><button type="button" th:text="'&gt; ' + ${nextMonth}" class="btn btn-primary btn-sm">NextMonth</button></a>
                         </div>
                     </div>
                     <div class="row"><div class="col-12"> <br/> </div></div>

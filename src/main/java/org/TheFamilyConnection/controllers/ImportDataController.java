@@ -17,7 +17,7 @@ import java.util.Date;
 
 @Controller
 @RequestMapping("importdata")
-public class ImportData {
+public class ImportDataController {
 
     @Autowired
     private UserDAO userDAO;
@@ -32,6 +32,9 @@ public class ImportData {
         String cvsSplitBy = ",";
         Integer j = 0;
 
+        if (true) {
+            return ("feature not available");
+        }
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             while ((line = br.readLine()) != null) {
