@@ -6,14 +6,15 @@
 </head>
 <body>
 <navHeader th:replace="fragments  :: navHeader"></navHeader>
-<h1 th:if="${errors}" class="error center" th:text="'Has Errors'"></h1>
+<!-- todo: next line for debugging only   -->
+<h1 th:if="${errors}" class="error center-text" th:text="'Has Errors'"></h1>
 <div class="container-fluid border theme-bg-color delayedDiv" id="delayedDiv">
     <!-- todo: put the name of the profile being edited either in the header or on the top line and not scrolling   -->
     <br />
     <div th:if="${alertMsg}" class="row">
         <div class="col-4"></div>
         <!-- todo: make alert message fade out after about 5 seconds   -->
-        <div class="col-4 errorMsg center" th:text="${alertMsg}"></div>
+        <div class="col-4 errorMsg center-text" th:text="${alertMsg}"></div>
     </div>
     <div th:unless="${formAction} == '/admin/addUser'"  class="row">
         <div class="col-4"></div>
@@ -21,7 +22,7 @@
             <div class="row">
                 <div class="col-6">
                     <br/><br/>
-                    <h2 class="center">Select User Profile To Edit</h2> <br /> <br />
+                    <h2 class="center-text">Select User Profile To Edit</h2> <br /> <br />
                 </div>
             </div>
             <form method="post" id="selectUser" action="/admin">
@@ -42,7 +43,7 @@
                 </div>
                 <br/>
                 <div class="row">
-                    <div class="col-6 center">
+                    <div class="col-6 center-text">
                         <a href="/admin/addUser"><button type="button" class="btn btn-primary btn-sm">Add User</button></a>
                         <a href="/user"><button type="button" class="btn btn-primary btn-sm">Cancel</button></a>
                     </div>
@@ -60,7 +61,7 @@
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
-            <h3 th:text="(${formAction} == '/admin/addUser')? 'New User Profile' : 'Profile for: ' + ${editUserName}" class="center theme-bg-color"></h3>
+            <h3 th:text="(${formAction} == '/admin/addUser')? 'New User Profile' : 'Profile for: ' + ${user.getFullName()}" class="center-text theme-bg-color"></h3>
         </div>
     </div>
     <div th:replace="fragments :: pBlock"></div>

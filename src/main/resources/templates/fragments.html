@@ -53,7 +53,7 @@
 <body>
 <navHeader th:fragment="navHeader">
     <!-- navbar -->
-    <nav th:unless="${userName}" class="navbar navbar-expand-lg fixed-top">
+    <nav th:unless="${adminUser} and ${adminUser.admin > 0}" class="navbar navbar-expand-lg fixed-top">
         <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
         <div class="large">User: Guest</div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,18 +70,18 @@
             </ul>
         </div>
     </nav>
-    <nav th:if="${userName}" class="navbar navbar-expand-lg fixed-top">
+    <nav th:if="${adminUser} and ${adminUser.admin > 0}" class="navbar navbar-expand-lg fixed-top">
         <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
         <div class="large">
-            <p th:text="'User: ' + ${userName}"></p>
-            <p class="ltblue" th:if="${editUserName}" th:text="'Profile for: ' + ${editUserName}"></p>
+            <p th:text="'User: ' + ${adminUser.getFullName()}"></p>
+            <p class="ltblue" th:if="${user} and ${user} != ${adminUser} and ${#strings.contains(#httpServletRequest.requestURI, 'admin')}" th:text="'Profile for: ' + ${user.getFullName()}"></p>
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav mr-4">
-                <li class="nav-item" th:if="${adminLevel} >= 5">
+                <li class="nav-item" th:if="${adminUser.admin} >= 5">
                     <a href="/admin"><button class="nav-link btn btn-primary btn-sm">Family Admin</button></a>
                 </li>
                 <li class="nav-item">
@@ -189,13 +189,13 @@
                 <input type="text" th:field="*{pob}" class="form-control"/>
                 <span th:errors="*{pob}" class="errorMsg"></span>
             </div>
-            <div  th:if="${adminID} and ${adminLevel} >= 5 and ${adminID} != *{id}" class="form-group col-2" onchange="enableDisableDOD()">
+            <div  th:if="${adminUser.admin} >= 5 and ${adminUser.id} != *{id}" class="form-group col-2" onchange="enableDisableDOD()">
                 <label for="deceasedCB">Deceased</label><br/>
-                <input type="checkbox" name="deceasedCB" id="deceasedCB" class="form-control center" />
+                <input type="checkbox" name="deceasedCB" id="deceasedCB"  th:checked="*{dod != null}" class="form-control center-content" />
             </div>
-            <div  th:if="${adminID} and ${adminLevel} >= 5 and ${adminID} != *{id}" class="form-group col-2">
+            <div  th:if="${adminUser.admin} >= 5 and ${adminUser.id} != *{id}" class="form-group col-2">
                 <label th:for="dod">Date of death</label><br/>
-                <input type="date" th:field="*{dod}" class="form-control" disabled="disabled" />
+                <input type="date" th:field="*{dod}" class="form-control" th:disabled="*{dod} == null" />
                 <span th:errors="*{dod}" class="errorMsg"></span>
             </div>
         </div>
@@ -206,10 +206,8 @@
                 <select name="mother" id="mother" class="form-control">
                     <option value="-1">Select</option>
                     <option value="0"></option>
-<!--                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"
-                            th:selected="${motherID} == ${eachUser.key}"></option>  -->
-                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.id}" th:text="${eachUser.getFullNameBday()}"
-                            th:selected="${motherID} == ${eachUser.id}"></option>
+                    <option th:each="eachUser: ${allMothers}" th:value="${eachUser.id}" th:text="${eachUser.getFullNameBday()}"
+                            th:selected="${user.getMotherId()} == ${eachUser.id}"></option>
                 </select>
             </div>
             <div class="form-group col-2">
@@ -217,9 +215,8 @@
                 <select name="father" id="father" class="form-control">
                     <option value="-1">Select</option>
                     <option value="0"></option>
-<!--                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}" -->
-                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.id}" th:text="${eachUser.getFullNameBday()}"
-                            th:selected="${fatherID} == ${eachUser.id}"></option>
+                    <option th:each="eachUser: ${allFathers}" th:value="${eachUser.id}" th:text="${eachUser.getFullNameBday()}"
+                            th:selected="${user.getFatherId()} == ${eachUser.id}"></option>
                 </select>
             </div>
             <div class="form-group col-2">
@@ -229,7 +226,7 @@
                     <option value="0"></option>
 <!--                    <option th:each="eachUser: ${allUsers}" th:value="${eachUser.key}" th:text="${eachUser.value}"-->
                     <option th:each="eachUser: ${allUsers}" th:value="${eachUser.id}" th:text="${eachUser.getFullNameBday()}"
-                            th:selected="${spouseID} == ${eachUser.id}"></option>
+                            th:selected="${user.getSpouseId()} == ${eachUser.id}"></option>
                 </select>
             </div>
             <div class="form-group col-2">
@@ -270,11 +267,11 @@
                     <option value="2" th:selected="*{gender} == 2 ? 'selected'">Male</option>
                 </select>
             </div>
-            <div th:if="${adminID} and ${adminLevel} >= 5 and ${adminID} != *{id}" class="form-group col-2">
+            <div th:if="${adminUser.admin} >= 5 and ${adminUser.id} != *{id}" class="form-group col-2">
                 <label for="invite">Send Email Invitation</label><br/>
                 <input type="checkbox" name="invite" id="invite" class="form-control" /> <!--onclick="document.getElementById('IdOfTheTextbox').disabled=this.checked;"-->
             </div>
-            <div th:if="${adminID} and ${adminLevel} >= 5 and ${adminID} != *{id}" class="slidecontainer col-2">
+            <div th:if="${adminUser.admin} >= 5 and ${adminUser.id} != *{id}" class="slidecontainer col-2">
                 <label th:for="admin"> Admin Level</label>  <span id="adminVal"></span>
                 <input  th:field="*{admin}" type="range" min="0" max="10" class="form-control"/>
             </div>
@@ -293,13 +290,13 @@
                 <hr class="thin"/>
             </div>
         </div>
-        <div class="row" th:if="${adminLevel} > 2">
+        <div class="row" th:if="${adminUser.admin} > 2">
             <div class="col-3"></div>
-            <div class="col-6 center">
+            <div class="col-6 center-text">
                 <button th:if="${formAction} == '/admin/addUser'" type="submit" class="btn btn-primary btn-sm">Add User</button>
                 <button th:unless="${formAction} == '/admin/addUser'" type="submit" class="btn btn-primary btn-sm">Update</button>
                 <a href="/user"><button type="button" class="btn btn-primary btn-sm">Cancel</button></a>
-                <span th:if="${adminID} and ${adminLevel} > 5 and ${adminID} != *{id} and ${formAction} != '/admin/addUser'">
+                <span th:if="${adminID} and ${adminUser.admin} > 5 and ${adminID} != *{id} and ${formAction} != '/admin/addUser'">
                     <button type="button" class="btn btn-danger btn-sm" onclick="revokeAccesss()">Revoke Access</button>
                     <a href="#"><button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete()">Delete User</button></a>
                 </span>

@@ -104,11 +104,8 @@ public class EventsController {
                                             "May", "June", "July", "August", "September", "October",
                                             "November", "December", "January");
         User adminUser = userDAO.findOne(UserController.getUserID());
-        if (adminUser != null) {
-            model.addAttribute("adminLevel", adminUser.getAdmin());
-            model.addAttribute("userName", adminUser.getFullName());
-            model.addAttribute("adminID", adminUser.getId());
-        }
+        model.addAttribute("user", adminUser);
+        model.addAttribute("adminUser", adminUser);
         model.addAttribute("theMonths", theMonths);
         model.addAttribute("lastMonth", theMonths.get(theMonthInt - 1));
         model.addAttribute("thisMonth", theMonths.get(theMonthInt));

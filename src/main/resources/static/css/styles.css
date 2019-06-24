@@ -36,8 +36,16 @@ div.no-gutter {
     font-size: large;
 }
 
-.centerText {
+.center-text {
     text-align: center;
+}
+
+.center-content {
+    align-content: center;
+}
+
+.small-text {
+    font-size: x-small;
 }
 
 .monthName {

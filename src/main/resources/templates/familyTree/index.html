@@ -7,6 +7,12 @@
 <body>
 <navHeader th:replace="fragments  :: navHeader"></navHeader>
 <div class="container-fluid border theme-bg-color delayedDiv" id="delayedDiv">
+    <div class="row">
+        <div class="col-12 center-content">
+            <br/><br/>
+            <h1 class="center-text">Family Tree</h1> <br /> <br />
+        </div>
+    </div>
     <div class="row"><div class="col-12">&nbsp;</div></div>
     <div class="row"><div class="col-2"></div>
         <div class="col-8">
@@ -15,7 +21,7 @@
                 <div class="col-2 border rounded">
                     <div class="row"><div class="col-12">&nbsp;</div></div>
                     <div class="row">
-                        <div class="col-12 text-center">
+                        <div class="col-12 text-center small-text">
                             <a th:if="${user.mother}" th:href="'/familytree/' + ${user.motherId}" th:text="${user.mother.getFullName()}">Mother</a>
                         </div>
                     </div>
@@ -25,7 +31,7 @@
                 <div class="col-2 border rounded">
                     <div class="row"><div class="col-12">&nbsp;</div></div>
                     <div class="row">
-                        <div class="col-12 text-center">
+                        <div class="col-12 text-center small-text">
                             <a th:if="${user.father}" th:href="'/familytree/' + ${user.fatherId}" th:text="${user.father.getFullName()}">Father</a>
                         </div>
                     </div>
@@ -50,49 +56,50 @@
             </div>
             <div class="row"><div class="col-12">&nbsp;</div> </div>
         </div>
-        <div class="col-1">
+        <div class="col-1"  th:if="${user.spouse}">
             <div class="row">
                 <div class="col-12 border border-top-0 border-right-0 border-left-0 border-success"><br/><br/></div>
             </div>
         </div>
-        <div class="col-2 border rounded">
+        <div class="col-2 border rounded"  th:if="${user.spouse}">
             <div class="row"><div class="col-12">&nbsp;</div></div>
             <div class="row">
-                <div class="col-12 text-center">
-                    <a th:if="${user.spouse}" th:href="'/familytree/' + ${user.spouseId}" th:text="${user.spouse.getFullName()}">Spouse</a>
+                <div class="col-12 text-center small-text">
+                    <a th:href="'/familytree/' + ${user.spouseId}" th:text="${user.spouse.getFullName()}">Spouse</a>
                 </div>
             </div>
             <div class="row"><div class="col-12">&nbsp;</div> </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-6 border border-top-0 border-bottom-0 border-left-0 border-success"><br/><br/></div>
-    </div>
-    <div class="row">
-        <div class="col-1" th:each="i:${#numbers.sequence(1,5-(#lists.size(theKids)-1)/2)}"></div>
-        <div class="col-1">
-            <div class="row">
-                <div class="col-sm"><br/></div>
-                <div class="col-sm border border-bottom-0 border-right-0 border-success"><br/><br/></div>
+    <span th:if="${theKids.size()} > 0">
+        <div class="row">
+            <div class="col-6 border border-top-0 border-bottom-0 border-left-0 border-success"><br/><br/></div>
+        </div>
+        <div class="row" th:if="${theKids.size()} == 1">
+            <div class="col-6 border border-top-0 border-bottom-0 border-left-0 border-success"><br/><br/></div>
+        </div>
+        <div class="row" th:if="${theKids.size()} > 1">
+            <div th:class="'col-' + ${6-(#lists.size(theKids)+1)/2}"></div>
+            <div th:class="'col-' + ${#lists.size(theKids)+#lists.size(theKids)%2}">
+                <div class="row">
+                    <div class="col-sm"><br/><br/></div>
+                    <div class="col-sm border border-bottom-0 border-right-0 border-success" th:each="i: ${#numbers.sequence(1,(#lists.size(theKids)*2)-2)}"
+                         th:classappend="${i % 2 == 0} ? ' border-left-0'"><br/><br/></div>
+                    <div class="col-sm border border-bottom-0 border-top-0 border-right-0 border-success"><br/><br/></div>
+                </div>
             </div>
         </div>
-        <div class="col-1" th:each="i:${#numbers.sequence(3,#lists.size(theKids))}">
-            <div class="col-sm border border-bottom-0 border-success">&nbsp;</div>
-            <div class="col-sm border border-bottom-0 border-success">&nbsp;</div>
-        </div>
-        <div class="col-1">
-            <div class="row">
-                <div class="col-sm border">&nbsp;</div>
-                <div class="col-sm"></div>
+        <div class="row" th:if="${theKids.size()} > 0">
+            <div th:class="'col-' + ${6-(#lists.size(theKids)+1)/2}"></div>
+            <div th:class="'col-' + ${#lists.size(theKids)+#lists.size(theKids)%2}">
+                <div class="row text-center small-text">
+                    <div class="col-sm border rounded side-buffer" th:each="eachKid: ${theKids}">
+                        <a th:href="'/familytree/' + ${eachKid.getId()}" th:text="${eachKid.getFullName()}">A Kid</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row" th:if="${theKids.size()} > 0">
-        <div class="col-1" th:each="i:${#numbers.sequence(1,5-(#lists.size(theKids)-1)/2)}"></div>
-        <div class="col-1 border rounded side-buffer" th:each="eachKid: ${theKids}">
-            <a th:href="'/familytree/' + ${eachKid.getId()}" th:text="${eachKid.getFullName()}">A Kid</a>
-        </div>
-    </div>
+    </span>
     <div class="row"><div class="col-12">&nbsp;</div></div>
     <div class="row"><div class="col-12">&nbsp;</div></div>
 </div>

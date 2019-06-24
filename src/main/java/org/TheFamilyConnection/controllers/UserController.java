@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -39,11 +40,25 @@ public class UserController {
         UserController.userID = userID;
     }
 
+    private List<User> getAllUsers(Integer gender) {
+        List<User> allUsers = new ArrayList<>();
+        if (gender == 0) {
+            allUsers = userDAO.findByActiveIsTrue();
+        } else {
+            allUsers = userDAO.findByActiveIsTrueAndGenderNot(gender);
+        }
+        allUsers.sort(comparator);
+        return allUsers;
+    }
+
+/*
     private List<User> getAllUsers() {
         List<User> allUsers = userDAO.findByActiveIsTrue();
         allUsers.sort(comparator);
         return allUsers;
     }
+
+ */
 
     private String buildProfileModel(Model model) {
         if (!UtilitiesController.isLoggedIn()) {
@@ -51,13 +66,11 @@ public class UserController {
         }
         User user = userDAO.findOne(userID);
         model.addAttribute("user", user);
-        model.addAttribute("userName", user.getFullName());
-        model.addAttribute("allUsers", getAllUsers());
-        model.addAttribute("motherID", user.getMotherId());
-        model.addAttribute("fatherID", user.getFatherId());
-        model.addAttribute("spouseID", user.getSpouseId());
+        model.addAttribute("allUsers", getAllUsers(0));
+        model.addAttribute("allMothers", getAllUsers(2));
+        model.addAttribute("allFathers", getAllUsers(1));
         model.addAttribute("formAction", "");
-        model.addAttribute("adminLevel", user.getAdmin());
+        model.addAttribute("adminUser", user);
         return "user/profile";
     }
 

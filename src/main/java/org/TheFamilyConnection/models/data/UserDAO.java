@@ -11,6 +11,7 @@ import java.util.List;
 @Transactional
 public interface UserDAO extends CrudRepository<User, Integer> {
     List<User> findByActiveIsTrue();
+    List<User> findByActiveIsTrueAndGenderNot(Integer gender);
     List<User> findByActiveIsTrueAndDobNotNull();
     List<User> findByFatherOrMotherOrSpouse(User father, User mother, User spouse);
     User findFirstByActiveIsTrueAndPrimaryEmailAndPassword(String username, String password);

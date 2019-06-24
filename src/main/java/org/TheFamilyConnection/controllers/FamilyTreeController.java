@@ -27,32 +27,30 @@ public class FamilyTreeController {
         return theKids;
     }
 
-
-
     @RequestMapping(value="", method = RequestMethod.GET)
     public String index(Model model){
-
+        if (!UtilitiesController.isLoggedIn()) {
+            return ("redirect:/login");
+        }
         User adminUser = userDAO.findOne(UserController.getUserID());
         User user = userDAO.findOne(UserController.getUserID());
         model.addAttribute("user", user);
+        model.addAttribute("adminUser", adminUser);
         model.addAttribute("theKids", getKids(user));
-        model.addAttribute("adminLevel", adminUser.getAdmin());
-        model.addAttribute("adminID", UserController.getUserID());
-
         return "familyTree/index";
     }
 
     @RequestMapping(value="{userID}", method = RequestMethod.GET)
     public String displayUser(@PathVariable Integer userID, Model model) {
-
+        if (!UtilitiesController.isLoggedIn()) {
+            return ("redirect:/login");
+        }
         User user = userDAO.findOne(userID);
         User adminUser = userDAO.findOne(UserController.getUserID());
         model.addAttribute("user", user);
         model.addAttribute("theKids", getKids(user));
-        model.addAttribute("adminLevel", adminUser.getAdmin());
-        model.addAttribute("adminID", UserController.getUserID());
-
+        model.addAttribute("adminUser", adminUser);
         return "familyTree/index";
-
     }
+
 }

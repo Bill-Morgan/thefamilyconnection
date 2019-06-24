@@ -6,12 +6,12 @@
 </head>
 <body>
 <navHeader th:replace="fragments  :: navHeader"></navHeader>
-<h1 class="error center" th:if="${errors}" th:text="'Has Errors'"></h1>
+<h1 class="error center-text" th:if="${errors}" th:text="'Has Errors'"></h1>
 <div class="container-fluid border theme-bg-color">
     <div class="row">
-        <div class="col-12 center">
+        <div class="col-12 center-content">
             <br/><br/>
-            <h1 class="center">My Profile</h1> <br /> <br />
+            <h1 class="center-text">My Profile</h1> <br /> <br />
         </div>
     </div>
     <div th:replace="fragments :: pBlock"></div>

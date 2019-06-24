@@ -10,6 +10,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -19,10 +20,19 @@ public class AdminController {
     @Autowired
     private UserDAO userDAO;
 
+    private int male = 2;
+
+    private int female = 1;
+
     private NameComparator comparator = new NameComparator();
 
-    private List<User> buildAllPeopleList() {
-        List<User> allUsers = userDAO.findByActiveIsTrue();
+    private List<User> buildAllPeopleList(Integer gender) {
+        List<User> allUsers = new ArrayList<>();
+        if (gender == 0) {
+            allUsers = userDAO.findByActiveIsTrue();
+        } else {
+            allUsers = userDAO.findByActiveIsTrueAndGenderNot(gender);
+        }
         allUsers.sort(comparator);
         return allUsers;
     }
@@ -137,7 +147,7 @@ public class AdminController {
             userDAO.save(user);
             setUserSpouse(user);
             model.addAttribute("alertMsg", "New User Saved");
-            return(loadIndexPage(user.getId(), "", model));
+            return(loadIndexPage(user.getId(), "/admin/userUpdate", model));
 
         }
         model.addAttribute("alertMsg", "Save failed.  Please correct errors.");
@@ -159,14 +169,10 @@ public class AdminController {
             user = new User();
         }
         model.addAttribute("user", user);
-        model.addAttribute("motherID", user.getMotherId());
-        model.addAttribute("fatherID", user.getFatherId());
-        model.addAttribute("spouseID", user.getSpouseId());
-        model.addAttribute("editUserName", user.getFullName());
-        model.addAttribute("allUsers", buildAllPeopleList());
-        model.addAttribute("userName", adminUser.getFullName());
-        model.addAttribute("adminLevel", adminUser.getAdmin());
-        model.addAttribute("adminID", UserController.getUserID());
+        model.addAttribute("allMothers", buildAllPeopleList(2));
+        model.addAttribute("allFathers", buildAllPeopleList(1));
+        model.addAttribute("allUsers", buildAllPeopleList(0));
+        model.addAttribute("adminUser", adminUser);
         model.addAttribute("formAction", formAction);
         return "admin/index";
     }
