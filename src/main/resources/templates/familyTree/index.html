@@ -22,7 +22,7 @@
                     <div class="row"><div class="col-12">&nbsp;</div></div>
                     <div class="row">
                         <div class="col-12 text-center small-text">
-                            <a th:if="${user.mother}" th:href="'/familytree/' + ${user.motherId}" th:text="${user.mother.getFullName()}">Mother</a>
+                            <a th:if="${user.mother}" th:href="'/familytree/' + ${user.motherId}" th:text="${user.mother.getFullName()}" title="Center User">Mother</a>
                         </div>
                     </div>
                     <div class="row"><div class="col-12">&nbsp;</div></div>
@@ -32,7 +32,7 @@
                     <div class="row"><div class="col-12">&nbsp;</div></div>
                     <div class="row">
                         <div class="col-12 text-center small-text">
-                            <a th:if="${user.father}" th:href="'/familytree/' + ${user.fatherId}" th:text="${user.father.getFullName()}">Father</a>
+                            <a th:if="${user.father}" th:href="'/familytree/' + ${user.fatherId}" th:text="${user.father.getFullName()}" title="Center User">Father</a>
                         </div>
                     </div>
                     <div class="row"><div class="col-12">&nbsp;</div> </div>
@@ -52,7 +52,8 @@
         <div class="col-2 border rounded">
             <div class="row"><div class="col-12">&nbsp;</div></div>
             <div class="row">
-                <div class="col-12 text-center" th:text="${user.getFullName()}">User</div>
+                <a th:if="${adminUser.admin} >= 5" class="col-12 text-center"  th:href="'/admin/edit/' + ${user.id}" th:text="${user.getFullName()}" title="Edit User" ></a>
+                <div th:unless="${adminUser.admin} >= 5" class="col-12 text-center" th:text="${user.getFullName()}">User</div>
             </div>
             <div class="row"><div class="col-12">&nbsp;</div> </div>
         </div>
@@ -65,7 +66,7 @@
             <div class="row"><div class="col-12">&nbsp;</div></div>
             <div class="row">
                 <div class="col-12 text-center small-text">
-                    <a th:href="'/familytree/' + ${user.spouseId}" th:text="${user.spouse.getFullName()}">Spouse</a>
+                    <a th:href="'/familytree/' + ${user.spouseId}" th:text="${user.spouse.getFullName()}" title="Center User">Spouse</a>
                 </div>
             </div>
             <div class="row"><div class="col-12">&nbsp;</div> </div>
@@ -94,7 +95,7 @@
             <div th:class="'col-' + ${#lists.size(theKids)+#lists.size(theKids)%2}">
                 <div class="row text-center small-text">
                     <div class="col-sm border rounded side-buffer" th:each="eachKid: ${theKids}">
-                        <a th:href="'/familytree/' + ${eachKid.getId()}" th:text="${eachKid.getFullName()}">A Kid</a>
+                        <a th:href="'/familytree/' + ${eachKid.getId()}" th:text="${eachKid.getFullName()}" title="Center User">A Kid</a>
                     </div>
                 </div>
             </div>

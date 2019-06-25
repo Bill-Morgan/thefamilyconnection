@@ -30,8 +30,8 @@
                                 <div class="events" th:text="${eachUser.getBirthDay()}"></div>
                             </div>
                             <div class="col-6">
-                                <a th:if="${adminID} and ${adminLevel} >= 5" class="events"  th:href="'/admin/edit/' + ${eachUser.id}" th:text="${eachUser.getFullName()}"></a>
-                                <div th:unless="${adminID} and ${adminLevel} >= 5" class="events" th:text="${eachUser.getFullName()}"></div>
+                                <a th:if="${adminUser} and ${adminUser.admin} >= 5" class="events"  th:href="'/admin/edit/' + ${eachUser.id}" th:text="${eachUser.getFullName()}" title="Edit User"></a>
+                                <div th:unless="${adminUser} and ${adminUser.admin} >= 5" class="events" th:text="${eachUser.getFullName()}"></div>
                             </div>
                         </div>
                     </span>
