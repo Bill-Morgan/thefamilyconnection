@@ -53,14 +53,13 @@
 <body>
 <navHeader th:fragment="navHeader">
     <!-- navbar -->
-    <nav th:unless="${adminUser} and ${adminUser.admin > 0}" class="navbar navbar-expand-lg fixed-top">
-        <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
-        <div class="large">User: Guest</div>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse " id="navbarSupportedContent">
-            <ul class="navbar-nav mr-4">
+    <nav th:unless="${adminUser} and ${adminUser.admin > 0}" class="navbar navbar-expand-lg navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" height="150px" width="300px" /></a>
+                <div class="navbar-brand large">User: Guest</div>
+            </div>
+            <ul class="nav navbar-nav nabvar-right">
                 <li class="nav-item">
                     <a href="/events"><button class="nav-link btn btn-primary btn-sm">Events</button></a>
                 </li>
@@ -70,17 +69,14 @@
             </ul>
         </div>
     </nav>
-    <nav th:if="${adminUser} and ${adminUser.admin > 0}" class="navbar navbar-expand-lg fixed-top">
-        <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" width="300px" /></a>
-        <div class="large">
-            <p th:text="'User: ' + ${adminUser.getFullName()}"></p>
-            <p class="ltblue" th:if="${user} and ${user} != ${adminUser} and ${#strings.contains(#httpServletRequest.requestURI, 'admin')}" th:text="'Profile for: ' + ${user.getFullName()}"></p>
-        </div>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse " id="navbarSupportedContent">
-            <ul class="navbar-nav mr-4">
+    <nav th:if="${adminUser} and ${adminUser.admin > 0}" class="navbar navbar-expand-lg navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><img th:src="@{/images/thefamilyconnection.png}" height="150px" width="300px" /></a>
+                <div class="navbar-brand large" th:text="'User: ' + ${adminUser.getFullName()}">User: Username</div>
+                <p class="ltblue" th:if="${user} and ${user} != ${adminUser} and ${#strings.contains(#httpServletRequest.requestURI, 'admin')}" th:text="'Profile for: ' + ${user.getFullName()}"></p>
+            </div>
+            <ul class="nav navbar-nav nabvar-right">
                 <li class="nav-item" th:if="${adminUser.admin} >= 5">
                     <a href="/admin"><button class="nav-link btn btn-primary btn-sm">Family Admin</button></a>
                 </li>
@@ -99,10 +95,7 @@
             </ul>
         </div>
     </nav>
-    <br/><br/>
-    <br/><br/>
-    <br/><br/>
-    <br/><br/>
+    <br class="small" />
 </navHeader>
 
 <div th:fragment="pBlock">
