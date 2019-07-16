@@ -2,6 +2,11 @@
     visibility: hidden;
 }
 
+br.small {
+    display: block;
+    margin: 2px 0;
+}
+
 .theme-bg-color {
     background-color: darkblue;
     color: white;
