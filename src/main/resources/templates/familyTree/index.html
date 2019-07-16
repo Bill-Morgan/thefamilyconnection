@@ -52,7 +52,7 @@
         <div class="col-2 border rounded">
             <div class="row"><div class="col-12">&nbsp;</div></div>
             <div class="row">
-                <a th:if="${adminUser.admin} >= 5" class="col-12 text-center"  th:href="'/admin/edit/' + ${user.id}" th:text="${user.getFullName()}" title="Edit User" ></a>
+                <a th:if="${adminUser.admin} >= 5" class="col-12 text-center"  th:href="'/admin/edit/' + ${user.id}" th:text="${user.getFullName()}" th:title="'Edit ' + ${user.getFullName()}" ></a>
                 <div th:unless="${adminUser.admin} >= 5" class="col-12 text-center" th:text="${user.getFullName()}">User</div>
             </div>
             <div class="row"><div class="col-12">&nbsp;</div> </div>

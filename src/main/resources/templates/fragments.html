@@ -296,7 +296,7 @@
                 <button th:if="${formAction} == '/admin/addUser'" type="submit" class="btn btn-primary btn-sm">Add User</button>
                 <button th:unless="${formAction} == '/admin/addUser'" type="submit" class="btn btn-primary btn-sm">Update</button>
                 <a href="/user"><button type="button" class="btn btn-primary btn-sm">Cancel</button></a>
-                <span th:if="${adminID} and ${adminUser.admin} > 5 and ${adminID} != *{id} and ${formAction} != '/admin/addUser'">
+                <span th:if="${adminUser.admin} >= 5 and ${adminUser.id} != *{id} and ${formAction} != '/admin/addUser'">
                     <button type="button" class="btn btn-danger btn-sm" onclick="revokeAccesss()">Revoke Access</button>
                     <a href="#"><button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete()">Delete User</button></a>
                 </span>
