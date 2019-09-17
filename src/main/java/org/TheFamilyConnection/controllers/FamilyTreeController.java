@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -28,25 +32,24 @@ public class FamilyTreeController {
     }
 
     @RequestMapping(value="", method = RequestMethod.GET)
-    public String index(Model model){
-        if (!UtilitiesController.isLoggedIn()) {
+    public String index(Model model, HttpServletRequest request, HttpServletResponse response){
+        if (!UtilitiesController.isLoggedIn(request, response)) {
             return ("redirect:/login");
         }
-        User adminUser = userDAO.findOne(UserController.getUserID());
-        User user = userDAO.findOne(UserController.getUserID());
-        model.addAttribute("user", user);
+        User adminUser = userDAO.findOne(UtilitiesController.getUserID(request, response));
+        model.addAttribute("user", adminUser);
         model.addAttribute("adminUser", adminUser);
-        model.addAttribute("theKids", getKids(user));
+        model.addAttribute("theKids", getKids(adminUser));
         return "familyTree/index";
     }
 
     @RequestMapping(value="{userID}", method = RequestMethod.GET)
-    public String displayUser(@PathVariable Integer userID, Model model) {
-        if (!UtilitiesController.isLoggedIn()) {
+    public String displayUser(@PathVariable Integer userID, Model model, HttpServletRequest request, HttpServletResponse response) {
+        if (!UtilitiesController.isLoggedIn(request, response)) {
             return ("redirect:/login");
         }
         User user = userDAO.findOne(userID);
-        User adminUser = userDAO.findOne(UserController.getUserID());
+        User adminUser = userDAO.findOne(UtilitiesController.getUserID(request, response));
         model.addAttribute("user", user);
         model.addAttribute("theKids", getKids(user));
         model.addAttribute("adminUser", adminUser);

@@ -9,6 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,26 +63,29 @@ public class AdminController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String adminSelectUser(Model model) {
-        return (loadIndexPage(UserController.getUserID(), "/admin/userUpdate", model));
+    public String adminSelectUser(Model model, HttpServletRequest request, HttpServletResponse response) {
+        return (loadIndexPage(UtilitiesController.getUserID(request, response), "/admin/userUpdate", model, request, response));
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String processAdminSelectUser(Model model, @RequestParam Integer editUser) {
-        return (loadIndexPage(editUser, "/admin/userUpdate", model));
+    public String processAdminSelectUser(Model model, @RequestParam Integer editUser,
+                                         HttpServletRequest request, HttpServletResponse response) {
+        return (loadIndexPage(editUser, "/admin/userUpdate", model, request, response));
     }
 
     @RequestMapping(value = "edit/{userID}", method = RequestMethod.GET)
-    public String displayEditUser(@PathVariable Integer userID, Model model) {
-        return (loadIndexPage(userID, "/admin/userUpdate", model));
+    public String displayEditUser(@PathVariable Integer userID, Model model,
+                                  HttpServletRequest request, HttpServletResponse response) {
+        return (loadIndexPage(userID, "/admin/userUpdate", model, request, response));
     }
 
     @RequestMapping(value = "deleteUser/{userID}", method = RequestMethod.GET)
-    public String processDeleteUser(@PathVariable Integer userID, Model model) {
-        if (!UtilitiesController.isLoggedIn()) {
+    public String processDeleteUser(@PathVariable Integer userID, Model model,
+                                    HttpServletRequest request, HttpServletResponse response) {
+        if (!UtilitiesController.isLoggedIn(request, response)) {
             return ("redirect:/login");
         }
-        if (userDAO.findOne(UserController.getUserID()).getAdmin() < 5) {
+        if (userDAO.findOne(UtilitiesController.getUserID(request, response)).getAdmin() < 5) {
             return ("redirect:/user");
         }
         User user = userDAO.findOne(userID);
@@ -97,7 +104,7 @@ public class AdminController {
         user.setActive(Boolean.FALSE);
         userDAO.save(user);
         model.addAttribute("alertMsg", "User Deleted");
-        return (loadIndexPage(UserController.getUserID(), "/admin/userUpdate", model));
+        return (loadIndexPage(UtilitiesController.getUserID(request, response), "/admin/userUpdate", model, request, response));
     }
 
     @RequestMapping(value = "userUpdate", method = RequestMethod.POST)
@@ -105,8 +112,8 @@ public class AdminController {
                                          @RequestParam Integer mother,
                                          @RequestParam Integer father,
                                          @RequestParam Integer spouse,
-                                         Model model) {
-        if (!UtilitiesController.isLoggedIn()) {
+                                         Model model,  HttpServletRequest request, HttpServletResponse response) {
+        if (!UtilitiesController.isLoggedIn(request, response)) {
             return ("redirect:/login");
         }
         if (!errors.hasErrors()) {
@@ -116,18 +123,18 @@ public class AdminController {
             user.setPassword(userDAO.findOne(user.getId()).getPassword());
             user.setActive(userDAO.findOne(user.getId()).getActive());
             // this prevents and admin user from altering their admin level.
-            if (user.getId() ==  UserController.getUserID()) {
-                user.setAdmin(userDAO.findOne(UserController.getUserID()).getAdmin());
+            if (user.getId() ==  UtilitiesController.getUserID(request, response)) {
+                user.setAdmin(userDAO.findOne(UtilitiesController.getUserID(request, response)).getAdmin());
             }
             userDAO.save(user);
             setUserSpouse(user);
         }
-        return(loadIndexPage(user.getId(), "/admin/userUpdate", model));
+        return(loadIndexPage(user.getId(), "/admin/userUpdate", model, request, response));
     }
 
     @RequestMapping(value = "addUser", method = RequestMethod.GET)
-    public String displayNewUserForm(Model model) {
-        return (loadIndexPage(0, "/admin/addUser", model));
+    public String displayNewUserForm(Model model, HttpServletRequest request, HttpServletResponse response) {
+        return (loadIndexPage(0, "/admin/addUser", model, request, response));
     }
 
     @RequestMapping(value = "addUser", method = RequestMethod.POST)
@@ -135,8 +142,8 @@ public class AdminController {
                                     @RequestParam Integer mother,
                                     @RequestParam Integer father,
                                     @RequestParam Integer spouse,
-                                    Model model) {
-        if (!UtilitiesController.isLoggedIn()) {
+                                    Model model, HttpServletRequest request, HttpServletResponse response) {
+        if (!UtilitiesController.isLoggedIn(request, response)) {
             return ("redirect:/login");
         }
         if (!errors.hasErrors()) {
@@ -147,21 +154,21 @@ public class AdminController {
             userDAO.save(user);
             setUserSpouse(user);
             model.addAttribute("alertMsg", "New User Saved");
-            return(loadIndexPage(user.getId(), "/admin/userUpdate", model));
+            return(loadIndexPage(user.getId(), "/admin/userUpdate", model, request, response));
 
         }
         model.addAttribute("alertMsg", "Save failed.  Please correct errors.");
-        return (loadIndexPage(0, "/admin/addUser", model));
+        return (loadIndexPage(0, "/admin/addUser", model, request, response));
     }
 
-    private String loadIndexPage(Integer userID, String formAction, Model model) {
-        if (!UtilitiesController.isLoggedIn()) {
+    private String loadIndexPage(Integer userID, String formAction, Model model, HttpServletRequest request, HttpServletResponse response) {
+        if (!UtilitiesController.isLoggedIn(request, response)) {
             return ("redirect:/login");
         }
-        if (userDAO.findOne(UserController.getUserID()).getAdmin() < 5) {
+        if (userDAO.findOne(UtilitiesController.getUserID(request, response)).getAdmin() < 5) {
             return ("redirect:/user");
         }
-        User adminUser = userDAO.findOne(UserController.getUserID());
+        User adminUser = userDAO.findOne(UtilitiesController.getUserID(request, response));
         User user;
         if (userID != 0) {
             user = userDAO.findOne(userID);

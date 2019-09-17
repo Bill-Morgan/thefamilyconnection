@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -76,13 +80,13 @@ public class EventsController {
     }
 
     @RequestMapping(value="calendar", method = RequestMethod.GET)
-    public String displayCalendarDefault(Model model) {
-        return buildEventsPageModel(model, getCurrentMonthInt() + 1);
+    public String displayCalendarDefault(Model model, HttpServletRequest request, HttpServletResponse response) {
+        return buildEventsPageModel(model, getCurrentMonthInt() + 1, request, response);
     }
 
     @RequestMapping(value="calendar/{theMonth}", method = RequestMethod.GET)
     public String displayCalendarMonth(@PathVariable String theMonth,
-                        Model model){
+                        Model model, HttpServletRequest request, HttpServletResponse response){
         Integer theMonthInt;
         try {
             theMonthInt = Integer.valueOf(theMonth);
@@ -96,14 +100,15 @@ public class EventsController {
         if (theMonthInt >= 13) {
             theMonthInt = 1;
         }
-        return buildEventsPageModel(model, theMonthInt);
+        return buildEventsPageModel(model, theMonthInt, request, response);
     }
 
-    private String buildEventsPageModel(Model model, Integer theMonthInt) {
+    private String buildEventsPageModel(Model model, Integer theMonthInt,
+                                        HttpServletRequest request, HttpServletResponse response) {
         List<String> theMonths = Arrays.asList("December", "January", "February", "March", "April",
                                             "May", "June", "July", "August", "September", "October",
                                             "November", "December", "January");
-        User adminUser = userDAO.findOne(UserController.getUserID());
+        User adminUser = userDAO.findOne(UtilitiesController.getUserID(request, response));
         model.addAttribute("user", adminUser);
         model.addAttribute("adminUser", adminUser);
         model.addAttribute("theMonths", theMonths);
@@ -115,6 +120,5 @@ public class EventsController {
         model.addAttribute("allUsers", getAllUsers(theMonthInt));
         return "events/index";
     }
-
 
 }

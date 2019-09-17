@@ -13,8 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -29,15 +36,40 @@ public class UserController {
 
     private NameComparator comparator = new NameComparator();
 
-    // this is the id of the currently logged in user
-    private static Integer userID = -1;
 
-    public static Integer getUserID() {
-        return userID;
+    //private String userIDKey = new String("userID");
+    private Integer userID = new Integer("-1");
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Create a session object if it is already not  created.
+        HttpSession session = request.getSession(true);
+
+
+        // Get session creation time.
+        Date createTime = new Date(session.getCreationTime());
+
+        // Get last access time of this web page.
+        Date lastAccessTime = new Date(session.getLastAccessedTime());
+
+
+        if (session.isNew()) {
+            session.setAttribute("userIDKey", "userID");
+        }
+        this.userID = (Integer) session.getAttribute("userIDKey");
     }
 
-    public static void setUserID(Integer userID) {
-        UserController.userID = userID;
+    public void setUserID(Integer userID, HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        session.setAttribute("userIDKey", userID);
+        //UserController.userID = userID;
+    }
+
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        userID = -1;
+        HttpSession session = request.getSession(true);
+        session.invalidate();
     }
 
     private List<User> getAllUsers(Integer gender) {
@@ -60,11 +92,11 @@ public class UserController {
 
  */
 
-    private String buildProfileModel(Model model) {
-        if (!UtilitiesController.isLoggedIn()) {
+    private String buildProfileModel(Model model, HttpServletRequest request, HttpServletResponse response) {
+        if (!UtilitiesController.isLoggedIn(request, response)) {
             return ("redirect:/login");
         }
-        User user = userDAO.findOne(userID);
+        User user = userDAO.findOne(UtilitiesController.getUserID(request, response));
         model.addAttribute("user", user);
         model.addAttribute("allUsers", getAllUsers(0));
         model.addAttribute("allMothers", getAllUsers(2));
@@ -75,13 +107,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "")
-    public String index() {
+    public String index(HttpServletRequest request, HttpServletResponse response) {
         return ("redirect:/user/profile");
     }
 
     @RequestMapping(value = "profile", method = RequestMethod.GET)
-    public String displayUserProfileForm(Model model) {
-        return (buildProfileModel(model));
+    public String displayUserProfileForm(Model model, HttpServletRequest request, HttpServletResponse response) {
+        return (buildProfileModel(model, request, response));
     }
 
     @RequestMapping(value = "profile", method = RequestMethod.POST)
@@ -89,8 +121,8 @@ public class UserController {
                                          @RequestParam Integer mother,
                                          @RequestParam Integer father,
                                          @RequestParam Integer spouse,
-                                         Model model) {
-        if (!UtilitiesController.isLoggedIn()) {
+                                         Model model, HttpServletRequest request, HttpServletResponse response) {
+        if (!UtilitiesController.isLoggedIn(request, response)) {
             return ("redirect:/login");
         }
         if (!errors.hasErrors()) {
@@ -102,6 +134,6 @@ public class UserController {
             user.setActive(Boolean.TRUE);
             userDAO.save(user);
         }
-        return (buildProfileModel(model));
+        return (buildProfileModel(model, request, response));
     }
 }
