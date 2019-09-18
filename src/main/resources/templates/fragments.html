@@ -307,6 +307,8 @@
     <br/><br/>
     <br/><br/>
 </div>
-<footer class="theme-bg-color" th:fragment="footer">© 2019 TheFamilyConnection.org </footer>
+<footer class="theme-bg-color" th:fragment="footer">© 2019 TheFamilyConnection.org
+<span th:if="${ipAddress}" th:text="${ipAddress}"></span>
+</footer>
 </body>
 </html>

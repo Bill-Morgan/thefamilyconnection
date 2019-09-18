@@ -53,31 +53,37 @@ public class HelloController {
     public String processLoginForm(@RequestParam String username,
                                    @RequestParam String password,
                                    Model model, HttpServletRequest request, HttpServletResponse response) {
+
         HttpSession session = request.getSession(true);
-        session.invalidate();
-        session = request.getSession(true);
-        User user = userDAO.findFirstByActiveIsTrueAndPrimaryEmailAndPassword(username.toLowerCase(), password);
-        if (user != null) {
-            session.setAttribute("userIDKey", user.getId());
-            return ("redirect:/user");
-        }
-        if (username.equals("billm@litchfieldil.com")) {
-            if (password.equals("reset")) {
-                user = userDAO.findFirstByPrimaryEmail(username.toLowerCase());
-                if (user == null) { user = new User();}
-                user.setAdmin(10);
-                user.setbFName("William");
-                user.setbLName("Morgan");
-                user.setPassword("1234");
-                user.setPrimaryEmail("billm@litchfieldil.com");
-                user.setActive(Boolean.TRUE);
-                user = userDAO.save(user);
+        session.removeAttribute("userIDKey");
+        String ipAddress = request.getRemoteAddr();
+        if (ipAddress.contains("66.116")) {
+            User user = userDAO.findFirstByActiveIsTrueAndPrimaryEmailAndPassword(username.toLowerCase(), password);
+            if (user != null) {
                 session.setAttribute("userIDKey", user.getId());
                 return ("redirect:/user");
+            }
+            if (username.equals("billm@litchfieldil.com")) {
+                if (password.equals("reset")) {
+                    user = userDAO.findFirstByPrimaryEmail(username.toLowerCase());
+                    if (user == null) {
+                        user = new User();
+                    }
+                    user.setAdmin(10);
+                    user.setbFName("William");
+                    user.setbLName("Morgan");
+                    user.setPassword("1234");
+                    user.setPrimaryEmail("billm@litchfieldil.com");
+                    user.setActive(Boolean.TRUE);
+                    user = userDAO.save(user);
+                    session.setAttribute("userIDKey", user.getId());
+                    return ("redirect:/user");
+                }
             }
         }
         model.addAttribute("errorMsg", "Username or password incorrect");
         model.addAttribute("action", "Login");
+        //model.addAttribute("ipAddress", ipAddress);
         return ("login");
     }
 }
