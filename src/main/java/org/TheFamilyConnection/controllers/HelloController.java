@@ -63,7 +63,7 @@ public class HelloController {
                 session.setAttribute("userIDKey", user.getId());
                 return ("redirect:/user");
             }
-            if (username.equals("billm@litchfieldil.com")) {
+            if (username.equals("billm@litchfieldil.comXXXXX")) {
                 if (password.equals("reset")) {
                     user = userDAO.findFirstByPrimaryEmail(username.toLowerCase());
                     if (user == null) {
